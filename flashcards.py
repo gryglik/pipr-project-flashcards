@@ -1,13 +1,17 @@
 from csv import DictReader
 
+
 class EmptyFieldError(Exception):
     pass
+
 
 class NotAFlashcardError(Exception):
     pass
 
+
 class FlascardNotInSetError(Exception):
     pass
+
 
 class Flashcard():
     def __init__(self, phrase, definition, priority=False) -> None:
