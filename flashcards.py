@@ -1,14 +1,13 @@
+from csv import DictReader
+
 class EmptyFieldError(Exception):
     pass
-
 
 class NotAFlashcardError(Exception):
     pass
 
-
 class FlascardNotInSetError(Exception):
     pass
-
 
 class Flashcard():
     def __init__(self, phrase, definition, priority=False) -> None:
@@ -79,3 +78,21 @@ class FlashcardsSet():
             return True
         except Exception as e:
             raise FlascardNotInSetError(f'Cannot find flashcard to delete {e}')
+
+
+class Session():
+    def __init__(self):
+        self.user_name = None
+
+
+def load_from_csv(fp):
+    flashcards_set = FlashcardsSet('[imported set]')
+    reader = DictReader(fp)
+    for record in reader:
+        flashcard = Flashcard(
+            record['phrase'],
+            record['definition'],
+            priority=True if record['priority'] == 'True' else False
+        )
+        flashcards_set.add_flashcard(flashcard)
+    return flashcards_set
