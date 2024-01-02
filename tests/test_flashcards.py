@@ -1,6 +1,7 @@
 from flashcards import Flashcard, FlashcardsSet
 from flashcards import (
-    EmptyFieldError, NotAFlashcardError, FlascardNotInSetError
+    EmptyFieldError, NotAFlashcardError, FlascardNotInSetError,
+    StringTooLongError
     )
 from flashcards import load_from_csv
 import pytest
@@ -27,21 +28,34 @@ def test_Flascard_create_empty_phrase_or_definition():
         Flashcard('', '')
 
 
-def test_Flascard_phrase_set():
+def test_Flashcard_phrase_set():
     flashcard = Flashcard('cat', 'pies')
     assert flashcard.phrase == 'cat'
     flashcard.phrase = 'dog'
     assert flashcard.phrase == 'dog'
 
 
-def test_Flashcarde_phrase_set_empty():
+def test_Flashcard_phrase_definition_set_too_long():
+    string = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+    with pytest.raises(StringTooLongError):
+        Flashcard(string, 'kot')
+    with pytest.raises(StringTooLongError):
+        Flashcard('cat', string)
+    flashcard = Flashcard('cat', 'kot')
+    with pytest.raises(StringTooLongError):
+        flashcard.phrase = string
+    with pytest.raises(StringTooLongError):
+        flashcard.definition = string
+
+
+def test_Flashcard_phrase_set_empty():
     flashcard = Flashcard('cat', 'kot')
     assert flashcard.phrase == 'cat'
     with pytest.raises(EmptyFieldError):
         flashcard.phrase = ''
 
 
-def test_Flascard_definition_set():
+def test_Flashcard_definition_set():
     flashcard = Flashcard('cat', 'pies')
     assert flashcard.definition == 'pies'
     flashcard.definition = 'kot'
@@ -68,6 +82,15 @@ def test_FlashcardsSet_create_empty_name():
                   Flashcard('dog', 'pies')]
     with pytest.raises(EmptyFieldError):
         FlashcardsSet('', flashcards)
+
+
+def test_FlashcardsSet_too_long_name():
+    string = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+    with pytest.raises(StringTooLongError):
+        FlashcardsSet(string)
+    with pytest.raises(StringTooLongError):
+        flashcards_set = FlashcardsSet('set1')
+        flashcards_set.name = string
 
 
 def test_FlashcardsSet_create_no_flashcards():

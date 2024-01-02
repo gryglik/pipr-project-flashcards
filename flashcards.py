@@ -13,21 +13,27 @@ class FlascardNotInSetError(Exception):
     pass
 
 
+class StringTooLongError(Exception):
+    pass
+
+
 class Flashcard():
-    def __init__(self, phrase, definition, priority=False) -> None:
+    def __init__(self, phrase: str, definition: str, priority=False):
         """Creates an instance of a flashcard."""
         self.phrase = phrase
         self.definition = definition
-        self._priority = bool(priority)
+        self.priority = bool(priority)
 
     @property
     def phrase(self):
         return self._phrase
 
     @phrase.setter
-    def phrase(self, new_phrase):
+    def phrase(self, new_phrase: str):
         if not new_phrase:
             raise EmptyFieldError('Phrase field cannot be empty.')
+        elif len(new_phrase) > 50:
+            raise StringTooLongError("Phrase is too long. Max 50 chars.")
         self._phrase = str(new_phrase)
         return True
 
@@ -36,19 +42,18 @@ class Flashcard():
         return self._definition
 
     @definition.setter
-    def definition(self, new_definition):
+    def definition(self, new_definition: str):
         if not new_definition:
             raise EmptyFieldError('Definition field cannot be empty.')
+        elif len(new_definition) > 50:
+            raise StringTooLongError('Definition is too long. Maz 50 chars.')
         self._definition = str(new_definition)
         return True
 
-    @property
-    def priority(self):
-        return self._priority
-
 
 class FlashcardsSet():
-    def __init__(self, name, flashcards=None):
+    """Creates an instance of flashcards set which keeps Flashcards objects."""
+    def __init__(self, name: str, flashcards=None):
         self.name = name
         self._flashcards = []
         if flashcards:
@@ -63,20 +68,23 @@ class FlashcardsSet():
     def name(self, new_name):
         if not new_name:
             raise EmptyFieldError('Set name cannot be empty.')
+        elif len(new_name) > 50:
+            raise StringTooLongError('Set name too long. Max 50 chars.')
         self._name = str(new_name)
+        return True
 
     @property
     def flashcards(self):
         return self._flashcards
 
-    def add_flashcard(self, flashcard):
+    def add_flashcard(self, flashcard: Flashcard):
         if isinstance(flashcard, Flashcard):
             self._flashcards.append(flashcard)
             return True
         else:
             raise NotAFlashcardError(f'Object {flashcard} is not a Flashcard.')
 
-    def remove_flashcard(self, flashcard):
+    def remove_flashcard(self, flashcard: Flashcard):
         try:
             self._flashcards.remove(flashcard)
             return True
@@ -85,11 +93,24 @@ class FlashcardsSet():
 
 
 class Session():
-    def __init__(self):
-        self.user_name = None
+    """Stores information about current learning session."""
+    def __init__(self, username: str):
+        self.username = username
+        self._flashcards_sets = []
+
+        self.opened_set: FlashcardsSet
+
+    @property
+    def flashcards_sets(self):
+        return self._flashcards_sets
+
+    def add_set(self, flashcard_set: FlashcardsSet):
+        self._flashcards_sets.append(flashcard_set)
+        return True
 
 
 def load_from_csv(fp):
+    """Returns an instance of FlashcardsSet for given file object"""
     flashcards_set = FlashcardsSet('[imported set]')
     reader = DictReader(fp)
     for record in reader:
