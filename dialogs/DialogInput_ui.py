@@ -45,6 +45,10 @@ class Ui_DialogInput(object):
 
         self.lineEdit = QLineEdit(DialogInput)
         self.lineEdit.setObjectName(u"lineEdit")
+        font = QFont()
+        font.setPointSize(16)
+        self.lineEdit.setFont(font)
+        self.lineEdit.setFrame(False)
 
         self.gridLayout.addWidget(self.lineEdit, 0, 1, 1, 1)
 

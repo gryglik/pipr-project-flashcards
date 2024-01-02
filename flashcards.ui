@@ -5,6 +5,14 @@
   <property name="enabled">
    <bool>true</bool>
   </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>850</width>
+    <height>600</height>
+   </rect>
+  </property>
   <property name="minimumSize">
    <size>
     <width>850</width>
@@ -25,13 +33,40 @@
 	font-family: Futura;
 }
 
-QPushButton {
+MyPushButton {
 	font-size: 15px;
+	background-color: transparent;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #ffffff;
+}
+
+MyPushButton:hover {
+	border-color: #9e5db8
+}
+
+MyPushButton#btn_flashcard{
+	border-width: 5px;
 }
 
 QListWidget {
 	background-color: white;
 	font-size: 20px;
+}
+
+QMainWindow{
+	background-color: #e4e2eb;
+}
+
+QLineEdit{
+	background-color: transparent;
+	border-bottom: 3px;
+	border-bottom-style: solid;
+	border-bottom-color: #9e5db8;
+}
+
+Line{
+	border-color: beige
 }
 </string>
   </property>
@@ -113,7 +148,7 @@ QListWidget {
               <enum>Qt::ClickFocus</enum>
              </property>
              <property name="maxLength">
-              <number>25</number>
+              <number>50</number>
              </property>
              <property name="frame">
               <bool>false</bool>
@@ -127,9 +162,9 @@ QListWidget {
             </widget>
            </item>
            <item alignment="Qt::AlignHCenter">
-            <widget class="QPushButton" name="btn_name">
+            <widget class="MyPushButton" name="btn_name">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -137,7 +172,7 @@ QListWidget {
              <property name="minimumSize">
               <size>
                <width>80</width>
-               <height>0</height>
+               <height>36</height>
               </size>
              </property>
              <property name="sizeIncrement">
@@ -155,7 +190,7 @@ QListWidget {
              <property name="font">
               <font>
                <family>Futura</family>
-               <pointsize>-1</pointsize>
+               <pointsize>6</pointsize>
               </font>
              </property>
              <property name="focusPolicy">
@@ -210,7 +245,7 @@ QListWidget {
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <widget class="QWidget" name="">
+          <widget class="QWidget" name="layoutWidget">
            <layout class="QVBoxLayout" name="verticalLayout">
             <property name="spacing">
              <number>0</number>
@@ -259,8 +294,11 @@ QListWidget {
               <property name="spacing">
                <number>5</number>
               </property>
+              <property name="topMargin">
+               <number>5</number>
+              </property>
               <item>
-               <widget class="QPushButton" name="btn_new_set">
+               <widget class="MyPushButton" name="btn_new_set">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -276,7 +314,6 @@ QListWidget {
                 <property name="font">
                  <font>
                   <family>Futura</family>
-                  <pointsize>-1</pointsize>
                  </font>
                 </property>
                 <property name="text">
@@ -285,7 +322,7 @@ QListWidget {
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="btn_set_delete">
+               <widget class="MyPushButton" name="btn_set_delete">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -301,7 +338,6 @@ QListWidget {
                 <property name="font">
                  <font>
                   <family>Futura</family>
-                  <pointsize>-1</pointsize>
                  </font>
                 </property>
                 <property name="text">
@@ -321,7 +357,7 @@ QListWidget {
                <number>5</number>
               </property>
               <property name="topMargin">
-               <number>0</number>
+               <number>5</number>
               </property>
               <item>
                <spacer name="horizontalSpacer">
@@ -337,7 +373,7 @@ QListWidget {
                </spacer>
               </item>
               <item>
-               <widget class="QPushButton" name="btn_import_set">
+               <widget class="MyPushButton" name="btn_import_set">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -353,7 +389,6 @@ QListWidget {
                 <property name="font">
                  <font>
                   <family>Futura</family>
-                  <pointsize>-1</pointsize>
                  </font>
                 </property>
                 <property name="text">
@@ -366,7 +401,7 @@ QListWidget {
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="btn_export_set">
+               <widget class="MyPushButton" name="btn_export_set">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -382,7 +417,6 @@ QListWidget {
                 <property name="font">
                  <font>
                   <family>Futura</family>
-                  <pointsize>-1</pointsize>
                  </font>
                 </property>
                 <property name="text">
@@ -416,9 +450,9 @@ QListWidget {
            </property>
            <widget class="QWidget" name="page_2"/>
            <widget class="QWidget" name="set_page">
-            <layout class="QVBoxLayout" name="verticalLayout_3">
+            <layout class="QVBoxLayout" name="verticalLayout_8">
              <property name="leftMargin">
-              <number>0</number>
+              <number>12</number>
              </property>
              <property name="topMargin">
               <number>0</number>
@@ -434,7 +468,7 @@ QListWidget {
                <property name="orientation">
                 <enum>Qt::Vertical</enum>
                </property>
-               <widget class="QWidget" name="widget" native="true">
+               <widget class="QWidget" name="flashcards_slider" native="true">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
                   <horstretch>0</horstretch>
@@ -442,11 +476,24 @@ QListWidget {
                  </sizepolicy>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_7">
-                 <property name="leftMargin">
-                  <number>12</number>
-                 </property>
                  <item>
-                  <widget class="QWidget" name="widget_2" native="true">
+                  <widget class="QLabel" name="lbl_flashcard_count">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>0 / 0</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="flashcard" native="true">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                      <horstretch>0</horstretch>
@@ -454,8 +501,23 @@ QListWidget {
                     </sizepolicy>
                    </property>
                    <layout class="QGridLayout" name="gridLayout">
-                    <item row="0" column="0">
-                     <widget class="QLabel" name="flashcard">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item row="1" column="0">
+                     <widget class="MyPushButton" name="btn_flashcard">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -468,20 +530,11 @@ QListWidget {
                         <height>200</height>
                        </size>
                       </property>
-                      <property name="sizeIncrement">
-                       <size>
-                        <width>30</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                      <property name="frameShape">
-                       <enum>QFrame::Box</enum>
-                      </property>
                       <property name="text">
-                       <string/>
+                       <string>add first flashcard</string>
                       </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
+                      <property name="checkable">
+                       <bool>true</bool>
                       </property>
                      </widget>
                     </item>
@@ -511,7 +564,10 @@ QListWidget {
                      </spacer>
                     </item>
                     <item>
-                     <widget class="QPushButton" name="btn_previous_flashcard">
+                     <widget class="MyPushButton" name="btn_previous_flashcard">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -527,7 +583,6 @@ QListWidget {
                       <property name="font">
                        <font>
                         <family>Futura</family>
-                        <pointsize>-1</pointsize>
                        </font>
                       </property>
                       <property name="text">
@@ -540,7 +595,10 @@ QListWidget {
                      </widget>
                     </item>
                     <item>
-                     <widget class="QPushButton" name="btn_next_flashcard">
+                     <widget class="MyPushButton" name="btn_next_flashcard">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -556,7 +614,6 @@ QListWidget {
                       <property name="font">
                        <font>
                         <family>Futura</family>
-                        <pointsize>-1</pointsize>
                        </font>
                       </property>
                       <property name="text">
@@ -586,22 +643,34 @@ QListWidget {
                  </item>
                 </layout>
                </widget>
-               <widget class="QListWidget" name="listFlashcards">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>1</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="frameShape">
-                 <enum>QFrame::NoFrame</enum>
-                </property>
-                <property name="horizontalScrollBarPolicy">
-                 <enum>Qt::ScrollBarAlwaysOff</enum>
-                </property>
-                <property name="uniformItemSizes">
-                 <bool>true</bool>
-                </property>
+               <widget class="QWidget" name="layoutWidget">
+                <layout class="QVBoxLayout" name="verticalLayout_3">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="NewFlashcardWidget" name="widget_new_flashcard" native="true"/>
+                 </item>
+                 <item>
+                  <widget class="QListWidget" name="list_flashcards">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>1</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="horizontalScrollBarPolicy">
+                    <enum>Qt::ScrollBarAlwaysOff</enum>
+                   </property>
+                   <property name="uniformItemSizes">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </widget>
              </item>
@@ -616,7 +685,80 @@ QListWidget {
     </item>
    </layout>
   </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>850</width>
+     <height>37</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionImport_Flashcards_Set"/>
+    <addaction name="actionExport_Flashcards_Set"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionFlashcards"/>
+   </widget>
+   <widget class="QMenu" name="menuStatistics">
+    <property name="title">
+     <string>Statistics</string>
+    </property>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuStatistics"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <action name="actionImport_Flashcards_Set">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/import.png</normaloff>icons/import.png</iconset>
+   </property>
+   <property name="text">
+    <string>Import Flashcards Set...</string>
+   </property>
+  </action>
+  <action name="actionExport_Flashcards_Set">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/export.png</normaloff>icons/export.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export Flashcards Set...</string>
+   </property>
+  </action>
+  <action name="actionFlashcards">
+   <property name="text">
+    <string>Flashcards</string>
+   </property>
+  </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MyPushButton</class>
+   <extends>QPushButton</extends>
+   <header>basic_widgets.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NewFlashcardWidget</class>
+   <extends>QWidget</extends>
+   <header>widgets.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
