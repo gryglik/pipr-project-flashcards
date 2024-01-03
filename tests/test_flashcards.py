@@ -1,9 +1,9 @@
-from flashcards import Flashcard, FlashcardsSet
-from flashcards import (
+from flashcards_logic import Flashcard, FlashcardsSet
+from flashcards_logic import (
     EmptyFieldError, NotAFlashcardError, FlascardNotInSetError,
     StringTooLongError
     )
-from flashcards import load_from_csv
+from flashcards_logic import load_from_csv
 import pytest
 
 

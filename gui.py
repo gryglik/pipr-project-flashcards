@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (
 import sys
 
 from flashcards_ui import Ui_MainWindow
-from flashcards import Session, FlashcardsSet, Flashcard, load_from_csv
+from flashcards_logic import Session, FlashcardsSet, Flashcard, load_from_csv
 from dialogs.DialogInput_ui import Ui_DialogInput
 from widgets import ListFlashcardsWidget, ListSetsWidget
 
