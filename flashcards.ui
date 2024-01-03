@@ -34,7 +34,7 @@
 }
 
 MyPushButton {
-	font-size: 15px;
+	font-size: 20px;
 	background-color: transparent;
 	border-width: 2px;
 	border-style: solid;
@@ -145,7 +145,7 @@ Line{
               </font>
              </property>
              <property name="focusPolicy">
-              <enum>Qt::ClickFocus</enum>
+              <enum>Qt::StrongFocus</enum>
              </property>
              <property name="maxLength">
               <number>50</number>
@@ -529,6 +529,11 @@ Line{
                         <width>300</width>
                         <height>200</height>
                        </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Futura</family>
+                       </font>
                       </property>
                       <property name="text">
                        <string>add first flashcard</string>

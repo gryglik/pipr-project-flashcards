@@ -48,6 +48,7 @@ class Ui_DialogInput(object):
         font = QFont()
         font.setPointSize(16)
         self.lineEdit.setFont(font)
+        self.lineEdit.setFocusPolicy(Qt.StrongFocus)
         self.lineEdit.setFrame(False)
 
         self.gridLayout.addWidget(self.lineEdit, 0, 1, 1, 1)

@@ -41,7 +41,7 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "MyPushButton {\n"
-"	font-size: 15px;\n"
+"	font-size: 20px;\n"
 "	background-color: transparent;\n"
 "	border-width: 2px;\n"
 "	border-style: solid;\n"
@@ -138,7 +138,7 @@ class Ui_MainWindow(object):
         font3.setFamilies([u"Futura"])
         font3.setPointSize(20)
         self.fld_name.setFont(font3)
-        self.fld_name.setFocusPolicy(Qt.ClickFocus)
+        self.fld_name.setFocusPolicy(Qt.StrongFocus)
         self.fld_name.setMaxLength(50)
         self.fld_name.setFrame(False)
         self.fld_name.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
@@ -335,6 +335,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.btn_flashcard.sizePolicy().hasHeightForWidth())
         self.btn_flashcard.setSizePolicy(sizePolicy)
         self.btn_flashcard.setMinimumSize(QSize(300, 200))
+        self.btn_flashcard.setFont(font6)
         self.btn_flashcard.setCheckable(True)
 
         self.gridLayout.addWidget(self.btn_flashcard, 1, 0, 1, 1)

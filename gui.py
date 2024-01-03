@@ -9,7 +9,7 @@ import sys
 from flashcards_ui import Ui_MainWindow
 from flashcards import Session, FlashcardsSet, Flashcard, load_from_csv
 from dialogs.DialogInput_ui import Ui_DialogInput
-from widgets import ListFlashcardsWidget
+from widgets import ListFlashcardsWidget, ListSetsWidget
 
 
 class DialogInput(QDialog):
@@ -17,6 +17,7 @@ class DialogInput(QDialog):
         super().__init__(parent)
         self.ui = Ui_DialogInput()
         self.ui.setupUi(self)
+
 
 class FlashcardWindow(QMainWindow):
     def __init__(self, parent=None):
@@ -78,9 +79,13 @@ class FlashcardWindow(QMainWindow):
         """Updates sets list"""
         self.ui.list_sets.clear()
         for flashcards_set in self.session.flashcards_sets:
-            list_sets_item = QListWidgetItem(flashcards_set.name)
-            list_sets_item.flashcards_set = flashcards_set
+            widget = ListSetsWidget(flashcards_set)
+            list_sets_item = QListWidgetItem()
             self.ui.list_sets.addItem(list_sets_item)
+            self.ui.list_sets.setItemWidget(list_sets_item, widget)
+            list_sets_item.setSizeHint(widget.sizeHint())
+            list_sets_item.setFlags(list_sets_item.flags() ^ Qt.ItemFlag.ItemIsSelectable)
+            list_sets_item.flashcards_set = flashcards_set
 
     def _initialiseSet(self, flashcards_set):
         """Opens set"""

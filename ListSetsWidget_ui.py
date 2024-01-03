@@ -20,19 +20,22 @@ from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QSizePolicy,
 
 from basic_widgets import MyPushButton
 
-class Ui_Form(object):
-    def setupUi(self, Form):
-        if not Form.objectName():
-            Form.setObjectName(u"Form")
-        Form.resize(342, 44)
-        self.horizontalLayout = QHBoxLayout(Form)
+class Ui_ListSetsWidget(object):
+    def setupUi(self, ListSetsWidget):
+        if not ListSetsWidget.objectName():
+            ListSetsWidget.setObjectName(u"ListSetsWidget")
+        ListSetsWidget.resize(393, 109)
+        self.horizontalLayout = QHBoxLayout(ListSetsWidget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.lbl_set_name = QLabel(Form)
+        self.lbl_set_name = QLabel(ListSetsWidget)
         self.lbl_set_name.setObjectName(u"lbl_set_name")
+        font = QFont()
+        font.setPointSize(16)
+        self.lbl_set_name.setFont(font)
 
         self.horizontalLayout.addWidget(self.lbl_set_name)
 
-        self.btn_edit_flashcard = MyPushButton(Form)
+        self.btn_edit_flashcard = MyPushButton(ListSetsWidget)
         self.btn_edit_flashcard.setObjectName(u"btn_edit_flashcard")
         self.btn_edit_flashcard.setEnabled(True)
         sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -40,9 +43,9 @@ class Ui_Form(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.btn_edit_flashcard.sizePolicy().hasHeightForWidth())
         self.btn_edit_flashcard.setSizePolicy(sizePolicy)
-        font = QFont()
-        font.setPointSize(13)
-        self.btn_edit_flashcard.setFont(font)
+        font1 = QFont()
+        font1.setPointSize(13)
+        self.btn_edit_flashcard.setFont(font1)
         icon = QIcon()
         icon.addFile(u"icons/edit.png", QSize(), QIcon.Normal, QIcon.Off)
         icon.addFile(u"icons/ready.png", QSize(), QIcon.Normal, QIcon.On)
@@ -51,12 +54,12 @@ class Ui_Form(object):
 
         self.horizontalLayout.addWidget(self.btn_edit_flashcard)
 
-        self.btn_delete_set = MyPushButton(Form)
+        self.btn_delete_set = MyPushButton(ListSetsWidget)
         self.btn_delete_set.setObjectName(u"btn_delete_set")
         self.btn_delete_set.setEnabled(True)
         sizePolicy.setHeightForWidth(self.btn_delete_set.sizePolicy().hasHeightForWidth())
         self.btn_delete_set.setSizePolicy(sizePolicy)
-        self.btn_delete_set.setFont(font)
+        self.btn_delete_set.setFont(font1)
         icon1 = QIcon()
         icon1.addFile(u"icons/thrash.png", QSize(), QIcon.Normal, QIcon.Off)
         self.btn_delete_set.setIcon(icon1)
@@ -65,13 +68,13 @@ class Ui_Form(object):
         self.horizontalLayout.addWidget(self.btn_delete_set)
 
 
-        self.retranslateUi(Form)
+        self.retranslateUi(ListSetsWidget)
 
-        QMetaObject.connectSlotsByName(Form)
+        QMetaObject.connectSlotsByName(ListSetsWidget)
     # setupUi
 
-    def retranslateUi(self, Form):
-        Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
+    def retranslateUi(self, ListSetsWidget):
+        ListSetsWidget.setWindowTitle(QCoreApplication.translate("ListSetsWidget", u"Form", None))
         self.lbl_set_name.setText("")
         self.btn_edit_flashcard.setText("")
         self.btn_delete_set.setText("")
