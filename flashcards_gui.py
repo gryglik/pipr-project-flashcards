@@ -6,7 +6,7 @@ from PySide6.QtWidgets import (
     QFileDialog, QPushButton)
 import sys
 
-from flashcards_ui import Ui_MainWindow
+from lib_ui.flashcards_ui import Ui_MainWindow
 from flashcards_logic import Session, FlashcardsSet, Flashcard, load_from_csv
 from dialogs.DialogInput_ui import Ui_DialogInput
 from widgets import ListFlashcardsWidget, ListSetsWidget

@@ -24,7 +24,7 @@ class Ui_ListSetsWidget(object):
     def setupUi(self, ListSetsWidget):
         if not ListSetsWidget.objectName():
             ListSetsWidget.setObjectName(u"ListSetsWidget")
-        ListSetsWidget.resize(393, 109)
+        ListSetsWidget.resize(251, 47)
         self.horizontalLayout = QHBoxLayout(ListSetsWidget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.lbl_set_name = QLabel(ListSetsWidget)
