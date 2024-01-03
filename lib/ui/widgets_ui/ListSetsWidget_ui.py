@@ -18,7 +18,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QSizePolicy,
     QWidget)
 
-from basic_widgets import MyPushButton
+from lib.ui.widgets_basic import PushButton
+import resources_rc
 
 class Ui_ListSetsWidget(object):
     def setupUi(self, ListSetsWidget):
@@ -35,7 +36,7 @@ class Ui_ListSetsWidget(object):
 
         self.horizontalLayout.addWidget(self.lbl_set_name)
 
-        self.btn_edit_flashcard = MyPushButton(ListSetsWidget)
+        self.btn_edit_flashcard = PushButton(ListSetsWidget)
         self.btn_edit_flashcard.setObjectName(u"btn_edit_flashcard")
         self.btn_edit_flashcard.setEnabled(True)
         sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -47,21 +48,21 @@ class Ui_ListSetsWidget(object):
         font1.setPointSize(13)
         self.btn_edit_flashcard.setFont(font1)
         icon = QIcon()
-        icon.addFile(u"icons/edit.png", QSize(), QIcon.Normal, QIcon.Off)
-        icon.addFile(u"icons/ready.png", QSize(), QIcon.Normal, QIcon.On)
+        icon.addFile(u":/lib/ui/icons/ui/icons/edit.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u":/lib/ui/icons/ui/icons/ready.png", QSize(), QIcon.Normal, QIcon.On)
         self.btn_edit_flashcard.setIcon(icon)
         self.btn_edit_flashcard.setCheckable(True)
 
         self.horizontalLayout.addWidget(self.btn_edit_flashcard)
 
-        self.btn_delete_set = MyPushButton(ListSetsWidget)
+        self.btn_delete_set = PushButton(ListSetsWidget)
         self.btn_delete_set.setObjectName(u"btn_delete_set")
         self.btn_delete_set.setEnabled(True)
         sizePolicy.setHeightForWidth(self.btn_delete_set.sizePolicy().hasHeightForWidth())
         self.btn_delete_set.setSizePolicy(sizePolicy)
         self.btn_delete_set.setFont(font1)
         icon1 = QIcon()
-        icon1.addFile(u"icons/thrash.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u":/lib/ui/icons/ui/icons/thrash.png", QSize(), QIcon.Normal, QIcon.Off)
         self.btn_delete_set.setIcon(icon1)
         self.btn_delete_set.setCheckable(False)
 

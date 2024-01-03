@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>850</width>
-    <height>600</height>
+    <height>623</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -33,7 +33,7 @@
 	font-family: Futura;
 }
 
-MyPushButton {
+PushButton {
 	font-size: 20px;
 	background-color: transparent;
 	border-width: 2px;
@@ -41,11 +41,11 @@ MyPushButton {
 	border-color: #ffffff;
 }
 
-MyPushButton:hover {
+PushButton:hover {
 	border-color: #9e5db8
 }
 
-MyPushButton#btn_flashcard{
+PushButton#btn_flashcard{
 	border-width: 5px;
 }
 
@@ -162,7 +162,7 @@ Line{
             </widget>
            </item>
            <item alignment="Qt::AlignHCenter">
-            <widget class="MyPushButton" name="btn_name">
+            <widget class="PushButton" name="btn_name">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                <horstretch>0</horstretch>
@@ -298,7 +298,7 @@ Line{
                <number>5</number>
               </property>
               <item>
-               <widget class="MyPushButton" name="btn_new_set">
+               <widget class="PushButton" name="btn_new_set">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -322,7 +322,7 @@ Line{
                </widget>
               </item>
               <item>
-               <widget class="MyPushButton" name="btn_set_delete">
+               <widget class="PushButton" name="btn_set_delete">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -344,8 +344,8 @@ Line{
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset>
-                  <normaloff>icons/delete.png</normaloff>icons/delete.png</iconset>
+                 <iconset resource="../../resources.qrc">
+                  <normaloff>:/lib/ui/icons/thrash.png</normaloff>:/lib/ui/icons/thrash.png</iconset>
                 </property>
                </widget>
               </item>
@@ -373,7 +373,7 @@ Line{
                </spacer>
               </item>
               <item>
-               <widget class="MyPushButton" name="btn_import_set">
+               <widget class="PushButton" name="btn_import_set">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -395,13 +395,13 @@ Line{
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset>
-                  <normaloff>icons/import.png</normaloff>icons/import.png</iconset>
+                 <iconset resource="../../resources.qrc">
+                  <normaloff>:/lib/ui/icons/import.png</normaloff>:/lib/ui/icons/import.png</iconset>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="MyPushButton" name="btn_export_set">
+               <widget class="PushButton" name="btn_export_set">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -423,8 +423,8 @@ Line{
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset>
-                  <normaloff>icons/export.png</normaloff>icons/export.png</iconset>
+                 <iconset resource="../../resources.qrc">
+                  <normaloff>:/lib/ui/icons/export.png</normaloff>:/lib/ui/icons/export.png</iconset>
                 </property>
                </widget>
               </item>
@@ -514,7 +514,7 @@ Line{
                      <number>0</number>
                     </property>
                     <item row="1" column="0">
-                     <widget class="MyPushButton" name="btn_flashcard">
+                     <widget class="PushButton" name="btn_flashcard">
                       <property name="enabled">
                        <bool>false</bool>
                       </property>
@@ -569,7 +569,7 @@ Line{
                      </spacer>
                     </item>
                     <item>
-                     <widget class="MyPushButton" name="btn_previous_flashcard">
+                     <widget class="PushButton" name="btn_previous_flashcard">
                       <property name="enabled">
                        <bool>false</bool>
                       </property>
@@ -594,13 +594,13 @@ Line{
                        <string/>
                       </property>
                       <property name="icon">
-                       <iconset>
-                        <normaloff>icons/l_arrow.png</normaloff>icons/l_arrow.png</iconset>
+                       <iconset resource="../../resources.qrc">
+                        <normaloff>:/lib/ui/icons/l_arrow.png</normaloff>:/lib/ui/icons/l_arrow.png</iconset>
                       </property>
                      </widget>
                     </item>
                     <item>
-                     <widget class="MyPushButton" name="btn_next_flashcard">
+                     <widget class="PushButton" name="btn_next_flashcard">
                       <property name="enabled">
                        <bool>false</bool>
                       </property>
@@ -625,8 +625,8 @@ Line{
                        <string/>
                       </property>
                       <property name="icon">
-                       <iconset>
-                        <normaloff>icons/r_arrow.png</normaloff>icons/r_arrow.png</iconset>
+                       <iconset resource="../../resources.qrc">
+                        <normaloff>:/lib/ui/icons/r_arrow.png</normaloff>:/lib/ui/icons/r_arrow.png</iconset>
                       </property>
                      </widget>
                     </item>
@@ -753,17 +753,19 @@ Line{
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MyPushButton</class>
+   <class>PushButton</class>
    <extends>QPushButton</extends>
-   <header>basic_widgets.h</header>
+   <header>lib/ui/widgets_basic.h</header>
   </customwidget>
   <customwidget>
    <class>NewFlashcardWidget</class>
    <extends>QWidget</extends>
-   <header>widgets.h</header>
+   <header>lib/ui/widgets.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

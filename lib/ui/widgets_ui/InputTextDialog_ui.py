@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'DialogInput.ui'
+## Form generated from reading UI file 'InputTextDialog.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.6.1
 ##
@@ -19,21 +19,21 @@ from PySide6.QtWidgets import (QAbstractButton, QApplication, QDialog, QDialogBu
     QGridLayout, QLabel, QLineEdit, QSizePolicy,
     QWidget)
 
-class Ui_DialogInput(object):
-    def setupUi(self, DialogInput):
-        if not DialogInput.objectName():
-            DialogInput.setObjectName(u"DialogInput")
-        DialogInput.resize(400, 100)
+class Ui_InputTextDialog(object):
+    def setupUi(self, InputTextDialog):
+        if not InputTextDialog.objectName():
+            InputTextDialog.setObjectName(u"InputTextDialog")
+        InputTextDialog.resize(400, 100)
         sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(DialogInput.sizePolicy().hasHeightForWidth())
-        DialogInput.setSizePolicy(sizePolicy)
-        DialogInput.setMinimumSize(QSize(400, 100))
-        DialogInput.setMaximumSize(QSize(400, 100))
-        self.gridLayout = QGridLayout(DialogInput)
+        sizePolicy.setHeightForWidth(InputTextDialog.sizePolicy().hasHeightForWidth())
+        InputTextDialog.setSizePolicy(sizePolicy)
+        InputTextDialog.setMinimumSize(QSize(400, 100))
+        InputTextDialog.setMaximumSize(QSize(400, 100))
+        self.gridLayout = QGridLayout(InputTextDialog)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.label = QLabel(DialogInput)
+        self.label = QLabel(InputTextDialog)
         self.label.setObjectName(u"label")
         sizePolicy1 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
         sizePolicy1.setHorizontalStretch(0)
@@ -43,7 +43,7 @@ class Ui_DialogInput(object):
 
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
 
-        self.lineEdit = QLineEdit(DialogInput)
+        self.lineEdit = QLineEdit(InputTextDialog)
         self.lineEdit.setObjectName(u"lineEdit")
         font = QFont()
         font.setPointSize(16)
@@ -53,7 +53,7 @@ class Ui_DialogInput(object):
 
         self.gridLayout.addWidget(self.lineEdit, 0, 1, 1, 1)
 
-        self.buttonBox = QDialogButtonBox(DialogInput)
+        self.buttonBox = QDialogButtonBox(InputTextDialog)
         self.buttonBox.setObjectName(u"buttonBox")
         self.buttonBox.setOrientation(Qt.Horizontal)
         self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
@@ -61,15 +61,15 @@ class Ui_DialogInput(object):
         self.gridLayout.addWidget(self.buttonBox, 1, 1, 1, 1)
 
 
-        self.retranslateUi(DialogInput)
-        self.buttonBox.accepted.connect(DialogInput.accept)
-        self.buttonBox.rejected.connect(DialogInput.reject)
+        self.retranslateUi(InputTextDialog)
+        self.buttonBox.accepted.connect(InputTextDialog.accept)
+        self.buttonBox.rejected.connect(InputTextDialog.reject)
 
-        QMetaObject.connectSlotsByName(DialogInput)
+        QMetaObject.connectSlotsByName(InputTextDialog)
     # setupUi
 
-    def retranslateUi(self, DialogInput):
-        DialogInput.setWindowTitle(QCoreApplication.translate("DialogInput", u"Dialog", None))
-        self.label.setText(QCoreApplication.translate("DialogInput", u"TextLabel", None))
+    def retranslateUi(self, InputTextDialog):
+        InputTextDialog.setWindowTitle(QCoreApplication.translate("InputTextDialog", u"Dialog", None))
+        self.label.setText(QCoreApplication.translate("InputTextDialog", u"TextLabel", None))
     # retranslateUi
 

@@ -1,0 +1,13 @@
+<RCC>
+  <qresource>
+    <file>lib/ui/icons/delete.png</file>
+    <file>lib/ui/icons/edit.png</file>
+    <file>lib/ui/icons/export.png</file>
+    <file>lib/ui/icons/import.png</file>
+    <file>lib/ui/icons/l_arrow.png</file>
+    <file>lib/ui/icons/plus.png</file>
+    <file>lib/ui/icons/r_arrow.png</file>
+    <file>lib/ui/icons/ready.png</file>
+    <file>lib/ui/icons/thrash.png</file>
+  </qresource>
+</RCC>

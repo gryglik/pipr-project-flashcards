@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>ListFlashcardsWidget</class>
  <widget class="QWidget" name="ListFlashcardsWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>461</width>
+    <height>44</height>
+   </rect>
+  </property>
   <property name="sizePolicy">
    <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
     <horstretch>0</horstretch>
@@ -86,7 +94,7 @@
     </widget>
    </item>
    <item>
-    <widget class="MyPushButton" name="btn_edit_flashcard">
+    <widget class="PushButton" name="btn_edit_flashcard">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -105,9 +113,9 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>icons/edit.png</normaloff>
-       <normalon>icons/ready.png</normalon>icons/edit.png</iconset>
+      <iconset resource="../../resources.qrc">
+       <normaloff>:/lib/ui/icons/ui/icons/edit.png</normaloff>
+       <normalon>icons/ready.png</normalon>:/lib/ui/icons/ui/icons/edit.png</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -115,7 +123,7 @@
     </widget>
    </item>
    <item>
-    <widget class="MyPushButton" name="btn_delete_flashcard">
+    <widget class="PushButton" name="btn_delete_flashcard">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -134,8 +142,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>icons/thrash.png</normaloff>icons/thrash.png</iconset>
+      <iconset resource="../../resources.qrc">
+       <normaloff>:/lib/ui/icons/ui/icons/thrash.png</normaloff>:/lib/ui/icons/ui/icons/thrash.png</iconset>
      </property>
      <property name="checkable">
       <bool>false</bool>
@@ -146,11 +154,13 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MyPushButton</class>
+   <class>PushButton</class>
    <extends>QPushButton</extends>
-   <header>basic_widgets.h</header>
+   <header>lib/ui/widgets_basic.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

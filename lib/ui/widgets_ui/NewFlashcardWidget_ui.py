@@ -18,7 +18,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLineEdit, QRadioButton,
     QSizePolicy, QWidget)
 
-from basic_widgets import MyPushButton
+from lib.ui.widgets_basic import PushButton
+import resources_rc
 
 class Ui_NewFlashcardsWidget(object):
     def setupUi(self, NewFlashcardsWidget):
@@ -72,7 +73,7 @@ class Ui_NewFlashcardsWidget(object):
 
         self.horizontalLayout.addWidget(self.rbtn_priority)
 
-        self.btn_add_flashcard = MyPushButton(NewFlashcardsWidget)
+        self.btn_add_flashcard = PushButton(NewFlashcardsWidget)
         self.btn_add_flashcard.setObjectName(u"btn_add_flashcard")
         self.btn_add_flashcard.setEnabled(False)
         sizePolicy3 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -84,19 +85,19 @@ class Ui_NewFlashcardsWidget(object):
         font1.setPointSize(13)
         self.btn_add_flashcard.setFont(font1)
         icon = QIcon()
-        icon.addFile(u"icons/plus.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u":/lib/ui/icons/plus.png", QSize(), QIcon.Normal, QIcon.Off)
         self.btn_add_flashcard.setIcon(icon)
 
         self.horizontalLayout.addWidget(self.btn_add_flashcard)
 
-        self.btn_cancel_flashcard = MyPushButton(NewFlashcardsWidget)
+        self.btn_cancel_flashcard = PushButton(NewFlashcardsWidget)
         self.btn_cancel_flashcard.setObjectName(u"btn_cancel_flashcard")
         self.btn_cancel_flashcard.setEnabled(False)
         sizePolicy3.setHeightForWidth(self.btn_cancel_flashcard.sizePolicy().hasHeightForWidth())
         self.btn_cancel_flashcard.setSizePolicy(sizePolicy3)
         self.btn_cancel_flashcard.setFont(font1)
         icon1 = QIcon()
-        icon1.addFile(u"icons/delete.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u":/lib/ui/icons/delete.png", QSize(), QIcon.Normal, QIcon.Off)
         self.btn_cancel_flashcard.setIcon(icon1)
         self.btn_cancel_flashcard.setCheckable(False)
 

@@ -97,7 +97,7 @@
     </widget>
    </item>
    <item>
-    <widget class="MyPushButton" name="btn_add_flashcard">
+    <widget class="PushButton" name="btn_add_flashcard">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -116,13 +116,13 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>icons/plus.png</normaloff>icons/plus.png</iconset>
+      <iconset resource="../../../resources.qrc">
+       <normaloff>:/lib/ui/icons/plus.png</normaloff>:/lib/ui/icons/plus.png</iconset>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="MyPushButton" name="btn_cancel_flashcard">
+    <widget class="PushButton" name="btn_cancel_flashcard">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -141,8 +141,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>icons/delete.png</normaloff>icons/delete.png</iconset>
+      <iconset resource="../../../resources.qrc">
+       <normaloff>:/lib/ui/icons/delete.png</normaloff>:/lib/ui/icons/delete.png</iconset>
      </property>
      <property name="checkable">
       <bool>false</bool>
@@ -153,11 +153,13 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MyPushButton</class>
+   <class>PushButton</class>
    <extends>QPushButton</extends>
-   <header>basic_widgets.h</header>
+   <header>lib/ui/widgets_basic.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

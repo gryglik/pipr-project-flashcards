@@ -22,15 +22,16 @@ from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
     QSpacerItem, QSplitter, QStackedWidget, QVBoxLayout,
     QWidget)
 
-from basic_widgets import MyPushButton
-from widgets import NewFlashcardWidget
+from lib.ui.widgets import NewFlashcardWidget
+from lib.ui.widgets_basic import PushButton
+import resources_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.setEnabled(True)
-        MainWindow.resize(850, 600)
+        MainWindow.resize(850, 623)
         MainWindow.setMinimumSize(QSize(850, 600))
         font = QFont()
         font.setFamilies([u"Futura"])
@@ -40,7 +41,7 @@ class Ui_MainWindow(object):
 "	font-family: Futura;\n"
 "}\n"
 "\n"
-"MyPushButton {\n"
+"PushButton {\n"
 "	font-size: 20px;\n"
 "	background-color: transparent;\n"
 "	border-width: 2px;\n"
@@ -48,11 +49,11 @@ class Ui_MainWindow(object):
 "	border-color: #ffffff;\n"
 "}\n"
 "\n"
-"MyPushButton:hover {\n"
+"PushButton:hover {\n"
 "	border-color: #9e5db8\n"
 "}\n"
 "\n"
-"MyPushButton#btn_flashcard{\n"
+"PushButton#btn_flashcard{\n"
 "	border-width: 5px;\n"
 "}\n"
 "\n"
@@ -145,7 +146,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_4.addWidget(self.fld_name, 0, Qt.AlignHCenter)
 
-        self.btn_name = MyPushButton(self.container_welcome)
+        self.btn_name = PushButton(self.container_welcome)
         self.btn_name.setObjectName(u"btn_name")
         sizePolicy1 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
         sizePolicy1.setHorizontalStretch(0)
@@ -222,7 +223,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setSpacing(5)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(-1, 5, -1, -1)
-        self.btn_new_set = MyPushButton(self.layoutWidget)
+        self.btn_new_set = PushButton(self.layoutWidget)
         self.btn_new_set.setObjectName(u"btn_new_set")
         sizePolicy4 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         sizePolicy4.setHorizontalStretch(0)
@@ -236,14 +237,14 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addWidget(self.btn_new_set)
 
-        self.btn_set_delete = MyPushButton(self.layoutWidget)
+        self.btn_set_delete = PushButton(self.layoutWidget)
         self.btn_set_delete.setObjectName(u"btn_set_delete")
         sizePolicy.setHeightForWidth(self.btn_set_delete.sizePolicy().hasHeightForWidth())
         self.btn_set_delete.setSizePolicy(sizePolicy)
         self.btn_set_delete.setMinimumSize(QSize(36, 36))
         self.btn_set_delete.setFont(font6)
         icon2 = QIcon()
-        icon2.addFile(u"icons/delete.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon2.addFile(u":/lib/ui/icons/thrash.png", QSize(), QIcon.Normal, QIcon.Off)
         self.btn_set_delete.setIcon(icon2)
 
         self.horizontalLayout.addWidget(self.btn_set_delete)
@@ -259,23 +260,27 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer)
 
-        self.btn_import_set = MyPushButton(self.layoutWidget)
+        self.btn_import_set = PushButton(self.layoutWidget)
         self.btn_import_set.setObjectName(u"btn_import_set")
         sizePolicy.setHeightForWidth(self.btn_import_set.sizePolicy().hasHeightForWidth())
         self.btn_import_set.setSizePolicy(sizePolicy)
         self.btn_import_set.setMinimumSize(QSize(36, 36))
         self.btn_import_set.setFont(font6)
-        self.btn_import_set.setIcon(icon)
+        icon3 = QIcon()
+        icon3.addFile(u":/lib/ui/icons/import.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.btn_import_set.setIcon(icon3)
 
         self.horizontalLayout_2.addWidget(self.btn_import_set)
 
-        self.btn_export_set = MyPushButton(self.layoutWidget)
+        self.btn_export_set = PushButton(self.layoutWidget)
         self.btn_export_set.setObjectName(u"btn_export_set")
         sizePolicy.setHeightForWidth(self.btn_export_set.sizePolicy().hasHeightForWidth())
         self.btn_export_set.setSizePolicy(sizePolicy)
         self.btn_export_set.setMinimumSize(QSize(36, 36))
         self.btn_export_set.setFont(font6)
-        self.btn_export_set.setIcon(icon1)
+        icon4 = QIcon()
+        icon4.addFile(u":/lib/ui/icons/export.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.btn_export_set.setIcon(icon4)
 
         self.horizontalLayout_2.addWidget(self.btn_export_set)
 
@@ -329,7 +334,7 @@ class Ui_MainWindow(object):
         self.gridLayout = QGridLayout(self.flashcard)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.btn_flashcard = MyPushButton(self.flashcard)
+        self.btn_flashcard = PushButton(self.flashcard)
         self.btn_flashcard.setObjectName(u"btn_flashcard")
         self.btn_flashcard.setEnabled(False)
         sizePolicy.setHeightForWidth(self.btn_flashcard.sizePolicy().hasHeightForWidth())
@@ -356,29 +361,29 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer_2)
 
-        self.btn_previous_flashcard = MyPushButton(self.flashcard_options)
+        self.btn_previous_flashcard = PushButton(self.flashcard_options)
         self.btn_previous_flashcard.setObjectName(u"btn_previous_flashcard")
         self.btn_previous_flashcard.setEnabled(False)
         sizePolicy.setHeightForWidth(self.btn_previous_flashcard.sizePolicy().hasHeightForWidth())
         self.btn_previous_flashcard.setSizePolicy(sizePolicy)
         self.btn_previous_flashcard.setMinimumSize(QSize(36, 36))
         self.btn_previous_flashcard.setFont(font6)
-        icon3 = QIcon()
-        icon3.addFile(u"icons/l_arrow.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.btn_previous_flashcard.setIcon(icon3)
+        icon5 = QIcon()
+        icon5.addFile(u":/lib/ui/icons/l_arrow.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.btn_previous_flashcard.setIcon(icon5)
 
         self.horizontalLayout_3.addWidget(self.btn_previous_flashcard)
 
-        self.btn_next_flashcard = MyPushButton(self.flashcard_options)
+        self.btn_next_flashcard = PushButton(self.flashcard_options)
         self.btn_next_flashcard.setObjectName(u"btn_next_flashcard")
         self.btn_next_flashcard.setEnabled(False)
         sizePolicy.setHeightForWidth(self.btn_next_flashcard.sizePolicy().hasHeightForWidth())
         self.btn_next_flashcard.setSizePolicy(sizePolicy)
         self.btn_next_flashcard.setMinimumSize(QSize(36, 36))
         self.btn_next_flashcard.setFont(font6)
-        icon4 = QIcon()
-        icon4.addFile(u"icons/r_arrow.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.btn_next_flashcard.setIcon(icon4)
+        icon6 = QIcon()
+        icon6.addFile(u":/lib/ui/icons/r_arrow.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.btn_next_flashcard.setIcon(icon6)
 
         self.horizontalLayout_3.addWidget(self.btn_next_flashcard)
 

@@ -6,17 +6,9 @@ from PySide6.QtWidgets import (
     QFileDialog, QPushButton)
 import sys
 
-from lib_ui.flashcards_ui import Ui_MainWindow
-from flashcards_logic import Session, FlashcardsSet, Flashcard, load_from_csv
-from dialogs.DialogInput_ui import Ui_DialogInput
-from widgets import ListFlashcardsWidget, ListSetsWidget
-
-
-class DialogInput(QDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.ui = Ui_DialogInput()
-        self.ui.setupUi(self)
+from lib.ui.flashcards_ui import Ui_MainWindow
+from lib.flashcards_logic import Session, FlashcardsSet, Flashcard, load_from_csv
+from lib.ui.widgets import ListFlashcardsWidget, ListSetsWidget, InputTextDialog
 
 
 class FlashcardWindow(QMainWindow):
@@ -57,7 +49,7 @@ class FlashcardWindow(QMainWindow):
 
     def _createNewSet(self):
         """Responsible for creating new set."""
-        dlg_set_name = DialogInput(self)
+        dlg_set_name = InputTextDialog(self)
         dlg_set_name.setWindowTitle('Create new flashcards set...')
         dlg_set_name.ui.label.setText('Enter name: ')
         dlg_set_name.ui.lineEdit.setMaxLength(50)

@@ -18,12 +18,14 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLineEdit, QRadioButton,
     QSizePolicy, QWidget)
 
-from basic_widgets import MyPushButton
+from lib.ui.widgets_basic import PushButton
+import resources_rc
 
 class Ui_ListFlashcardsWidget(object):
     def setupUi(self, ListFlashcardsWidget):
         if not ListFlashcardsWidget.objectName():
             ListFlashcardsWidget.setObjectName(u"ListFlashcardsWidget")
+        ListFlashcardsWidget.resize(461, 44)
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -72,7 +74,7 @@ class Ui_ListFlashcardsWidget(object):
 
         self.horizontalLayout.addWidget(self.rbtn_priority)
 
-        self.btn_edit_flashcard = MyPushButton(ListFlashcardsWidget)
+        self.btn_edit_flashcard = PushButton(ListFlashcardsWidget)
         self.btn_edit_flashcard.setObjectName(u"btn_edit_flashcard")
         self.btn_edit_flashcard.setEnabled(True)
         sizePolicy3 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -84,21 +86,21 @@ class Ui_ListFlashcardsWidget(object):
         font1.setPointSize(13)
         self.btn_edit_flashcard.setFont(font1)
         icon = QIcon()
-        icon.addFile(u"icons/edit.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u":/lib/ui/icons/ui/icons/edit.png", QSize(), QIcon.Normal, QIcon.Off)
         icon.addFile(u"icons/ready.png", QSize(), QIcon.Normal, QIcon.On)
         self.btn_edit_flashcard.setIcon(icon)
         self.btn_edit_flashcard.setCheckable(True)
 
         self.horizontalLayout.addWidget(self.btn_edit_flashcard)
 
-        self.btn_delete_flashcard = MyPushButton(ListFlashcardsWidget)
+        self.btn_delete_flashcard = PushButton(ListFlashcardsWidget)
         self.btn_delete_flashcard.setObjectName(u"btn_delete_flashcard")
         self.btn_delete_flashcard.setEnabled(True)
         sizePolicy3.setHeightForWidth(self.btn_delete_flashcard.sizePolicy().hasHeightForWidth())
         self.btn_delete_flashcard.setSizePolicy(sizePolicy3)
         self.btn_delete_flashcard.setFont(font1)
         icon1 = QIcon()
-        icon1.addFile(u"icons/thrash.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u":/lib/ui/icons/ui/icons/thrash.png", QSize(), QIcon.Normal, QIcon.Off)
         self.btn_delete_flashcard.setIcon(icon1)
         self.btn_delete_flashcard.setCheckable(False)
 
