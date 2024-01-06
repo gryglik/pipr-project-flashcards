@@ -35,7 +35,6 @@ class Ui_NewFlashcardsWidget(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.fld_phrase = QLineEdit(NewFlashcardsWidget)
         self.fld_phrase.setObjectName(u"fld_phrase")
-        self.fld_phrase.setEnabled(False)
         sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
@@ -51,7 +50,6 @@ class Ui_NewFlashcardsWidget(object):
 
         self.fld_definition = QLineEdit(NewFlashcardsWidget)
         self.fld_definition.setObjectName(u"fld_definition")
-        self.fld_definition.setEnabled(False)
         sizePolicy1.setHeightForWidth(self.fld_definition.sizePolicy().hasHeightForWidth())
         self.fld_definition.setSizePolicy(sizePolicy1)
         self.fld_definition.setFont(font)
@@ -62,7 +60,7 @@ class Ui_NewFlashcardsWidget(object):
 
         self.rbtn_priority = QRadioButton(NewFlashcardsWidget)
         self.rbtn_priority.setObjectName(u"rbtn_priority")
-        self.rbtn_priority.setEnabled(False)
+        self.rbtn_priority.setEnabled(True)
         sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
@@ -75,7 +73,6 @@ class Ui_NewFlashcardsWidget(object):
 
         self.btn_add_flashcard = PushButton(NewFlashcardsWidget)
         self.btn_add_flashcard.setObjectName(u"btn_add_flashcard")
-        self.btn_add_flashcard.setEnabled(False)
         sizePolicy3 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy3.setHorizontalStretch(0)
         sizePolicy3.setVerticalStretch(0)
@@ -92,7 +89,6 @@ class Ui_NewFlashcardsWidget(object):
 
         self.btn_cancel_flashcard = PushButton(NewFlashcardsWidget)
         self.btn_cancel_flashcard.setObjectName(u"btn_cancel_flashcard")
-        self.btn_cancel_flashcard.setEnabled(False)
         sizePolicy3.setHeightForWidth(self.btn_cancel_flashcard.sizePolicy().hasHeightForWidth())
         self.btn_cancel_flashcard.setSizePolicy(sizePolicy3)
         self.btn_cancel_flashcard.setFont(font1)

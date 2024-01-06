@@ -86,8 +86,8 @@ class Ui_ListFlashcardsWidget(object):
         font1.setPointSize(13)
         self.btn_edit_flashcard.setFont(font1)
         icon = QIcon()
-        icon.addFile(u":/lib/ui/icons/ui/icons/edit.png", QSize(), QIcon.Normal, QIcon.Off)
-        icon.addFile(u"icons/ready.png", QSize(), QIcon.Normal, QIcon.On)
+        icon.addFile(u":/lib/ui/icons/edit.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u":/lib/ui/icons/ready.png", QSize(), QIcon.Normal, QIcon.On)
         self.btn_edit_flashcard.setIcon(icon)
         self.btn_edit_flashcard.setCheckable(True)
 
@@ -100,7 +100,7 @@ class Ui_ListFlashcardsWidget(object):
         self.btn_delete_flashcard.setSizePolicy(sizePolicy3)
         self.btn_delete_flashcard.setFont(font1)
         icon1 = QIcon()
-        icon1.addFile(u":/lib/ui/icons/ui/icons/thrash.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u":/lib/ui/icons/thrash.png", QSize(), QIcon.Normal, QIcon.Off)
         self.btn_delete_flashcard.setIcon(icon1)
         self.btn_delete_flashcard.setCheckable(False)
 

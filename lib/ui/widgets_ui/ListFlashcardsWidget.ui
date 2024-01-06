@@ -113,9 +113,9 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset resource="../../resources.qrc">
-       <normaloff>:/lib/ui/icons/ui/icons/edit.png</normaloff>
-       <normalon>icons/ready.png</normalon>:/lib/ui/icons/ui/icons/edit.png</iconset>
+      <iconset resource="../../../resources.qrc">
+       <normaloff>:/lib/ui/icons/edit.png</normaloff>
+       <normalon>:/lib/ui/icons/ready.png</normalon>:/lib/ui/icons/edit.png</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -142,8 +142,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset resource="../../resources.qrc">
-       <normaloff>:/lib/ui/icons/ui/icons/thrash.png</normaloff>:/lib/ui/icons/ui/icons/thrash.png</iconset>
+      <iconset resource="../../../resources.qrc">
+       <normaloff>:/lib/ui/icons/thrash.png</normaloff>:/lib/ui/icons/thrash.png</iconset>
      </property>
      <property name="checkable">
       <bool>false</bool>
@@ -160,7 +160,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../resources.qrc"/>
+  <include location="../../../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

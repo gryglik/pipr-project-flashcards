@@ -15,7 +15,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QSizePolicy,
+from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLineEdit, QSizePolicy,
     QWidget)
 
 from lib.ui.widgets_basic import PushButton
@@ -25,44 +25,43 @@ class Ui_ListSetsWidget(object):
     def setupUi(self, ListSetsWidget):
         if not ListSetsWidget.objectName():
             ListSetsWidget.setObjectName(u"ListSetsWidget")
-        ListSetsWidget.resize(251, 47)
+        ListSetsWidget.resize(451, 108)
         self.horizontalLayout = QHBoxLayout(ListSetsWidget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.lbl_set_name = QLabel(ListSetsWidget)
-        self.lbl_set_name.setObjectName(u"lbl_set_name")
-        font = QFont()
-        font.setPointSize(16)
-        self.lbl_set_name.setFont(font)
+        self.horizontalLayout.setContentsMargins(20, 18, 20, 20)
+        self.fld_set_name = QLineEdit(ListSetsWidget)
+        self.fld_set_name.setObjectName(u"fld_set_name")
+        self.fld_set_name.setFrame(False)
 
-        self.horizontalLayout.addWidget(self.lbl_set_name)
+        self.horizontalLayout.addWidget(self.fld_set_name)
 
-        self.btn_edit_flashcard = PushButton(ListSetsWidget)
-        self.btn_edit_flashcard.setObjectName(u"btn_edit_flashcard")
-        self.btn_edit_flashcard.setEnabled(True)
+        self.btn_edit_set_name = PushButton(ListSetsWidget)
+        self.btn_edit_set_name.setObjectName(u"btn_edit_set_name")
+        self.btn_edit_set_name.setEnabled(True)
         sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.btn_edit_flashcard.sizePolicy().hasHeightForWidth())
-        self.btn_edit_flashcard.setSizePolicy(sizePolicy)
-        font1 = QFont()
-        font1.setPointSize(13)
-        self.btn_edit_flashcard.setFont(font1)
+        sizePolicy.setHeightForWidth(self.btn_edit_set_name.sizePolicy().hasHeightForWidth())
+        self.btn_edit_set_name.setSizePolicy(sizePolicy)
+        font = QFont()
+        font.setPointSize(13)
+        self.btn_edit_set_name.setFont(font)
         icon = QIcon()
-        icon.addFile(u":/lib/ui/icons/ui/icons/edit.png", QSize(), QIcon.Normal, QIcon.Off)
-        icon.addFile(u":/lib/ui/icons/ui/icons/ready.png", QSize(), QIcon.Normal, QIcon.On)
-        self.btn_edit_flashcard.setIcon(icon)
-        self.btn_edit_flashcard.setCheckable(True)
+        icon.addFile(u":/lib/ui/icons/edit.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u":/lib/ui/icons/ready.png", QSize(), QIcon.Normal, QIcon.On)
+        self.btn_edit_set_name.setIcon(icon)
+        self.btn_edit_set_name.setCheckable(True)
 
-        self.horizontalLayout.addWidget(self.btn_edit_flashcard)
+        self.horizontalLayout.addWidget(self.btn_edit_set_name)
 
         self.btn_delete_set = PushButton(ListSetsWidget)
         self.btn_delete_set.setObjectName(u"btn_delete_set")
         self.btn_delete_set.setEnabled(True)
         sizePolicy.setHeightForWidth(self.btn_delete_set.sizePolicy().hasHeightForWidth())
         self.btn_delete_set.setSizePolicy(sizePolicy)
-        self.btn_delete_set.setFont(font1)
+        self.btn_delete_set.setFont(font)
         icon1 = QIcon()
-        icon1.addFile(u":/lib/ui/icons/ui/icons/thrash.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u":/lib/ui/icons/thrash.png", QSize(), QIcon.Normal, QIcon.Off)
         self.btn_delete_set.setIcon(icon1)
         self.btn_delete_set.setCheckable(False)
 
@@ -76,8 +75,7 @@ class Ui_ListSetsWidget(object):
 
     def retranslateUi(self, ListSetsWidget):
         ListSetsWidget.setWindowTitle(QCoreApplication.translate("ListSetsWidget", u"Form", None))
-        self.lbl_set_name.setText("")
-        self.btn_edit_flashcard.setText("")
+        self.btn_edit_set_name.setText("")
         self.btn_delete_set.setText("")
     # retranslateUi
 
