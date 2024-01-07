@@ -1,5 +1,5 @@
 import sys
-from typing import Callable
+import time
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QListWidgetItem, QFileDialog)
@@ -11,9 +11,10 @@ from lib.ui.dialogs import (
     InputSetNameDialog, InputUsernameDialog, GenerateTestDialog,
     ConductTestDialog)
 
-from flashcards_logic import Session, FlashcardsSet, Flashcard, Test
+from flashcards_logic import (
+    Session, SessionStats, FlashcardsSet, Flashcard, Test)
 
-from flashcards_io import Import
+from flashcards_io import Import, Export
 
 
 class FlashcardWindow(QMainWindow):
@@ -26,6 +27,8 @@ class FlashcardWindow(QMainWindow):
         # Initialising first flashcards set
         self.session.add_set(FlashcardsSet('My first set.'))
         self._setupListSets()
+        # Initialising home page
+        self._initialiseHomePage()
 
     def _initialiseSession(self) -> Session:
         """Initialises session."""
@@ -57,9 +60,12 @@ class FlashcardWindow(QMainWindow):
         ui.setupUi(self)
         ui.stack_1.setCurrentIndex(0)
         # Binding buttons to methods
+        # - Home button
+        ui.btn_homepage.clicked.connect(self._setupHomePage)
         # - Managing flashcards sets
         ui.btn_new_set.clicked.connect(self._createNewSet)
         ui.btn_import_set.clicked.connect(self._importSet)
+        ui.btn_export_set.clicked.connect(self._exportSet)
         ui.list_sets.itemClicked.connect(
             lambda item: self._setupFlashcardsSetPage(item.flashcards_set))
         # - Previewing flashcards
@@ -78,9 +84,35 @@ class FlashcardWindow(QMainWindow):
         """Initialisises home page."""
         self.ui.stack_1.setCurrentIndex(0)
         self.ui.lbl_greet.setText(f'Hi {self.session.username}')
+        self._setupStats()
+
+    def _setupHomePage(self) -> None:
+        """Refreshes home page."""
+        # Closing set
+        self.session.close_set()
+        # Refreshing sets list
+        self._setupListSets()
+        # Refreshing statisticcs
+        self._setupStats()
+        # Changing page
+        self.ui.stack_1.setCurrentIndex(0)
+
+    def _setupStats(self) -> None:
+        """Refreshes statics widget on home page."""
+        # Accessing statistics
+        stats: SessionStats = self.session.get_stats()
+        # Setuping statistics in ui
+        self.ui.fld_sets_count.setText(f'{stats.flashcards_sets_count()}')
+        self.ui.fld_flashcards_count.setText(f'{stats.flashcard_count()}')
+        # - formating time
+        session_time = stats.get_time()
+        session_time_str: str = time.strftime(
+            '%H:%M', time.gmtime(session_time))
+        # Setuping time in ui
+        self.ui.fld_time.setText(session_time_str)
 
     def _setupListSets(self) -> None:
-        """Refreshes flashcards sets list."""
+        """Refreshes flashcards sets list and setups home page"""
         # Clearing list of flashcards sets
         self.ui.list_sets.clear()
         # Adding flashcards sets to the list
@@ -98,6 +130,11 @@ class FlashcardWindow(QMainWindow):
             # Binding actions to buttons
             widget.ui.btn_edit_set_name.clicked.connect(self._editSetName)
             widget.ui.btn_delete_set.clicked.connect(self._deleteSet)
+            # Setuping selection if set is opened
+            if flashcards_set == self.session.opened_set:
+                list_sets_item.setSelected(True)
+        # Updating statistics
+        self._setupStats()
 
     def _editSetName(self, checked: bool) -> None:
         """If checked enables editing set's name provided by sender's parent,
@@ -132,9 +169,13 @@ class FlashcardWindow(QMainWindow):
             self.session.remove_set(flashcards_set)
         except Exception as e:
             ErrorDialog(str(e), parent=list_sets_widget)
-        self._setupListSets()
+        # Setuping home page if removed opened set
+        if not self.session.opened_set:
+            self._setupHomePage()
+        else:
+            self._setupListSets()
 
-    def _createNewSet(self) -> Callable:
+    def _createNewSet(self) -> None:
         """Creates a new set and refreshes sets list."""
         # Opening dialog
         dlg_set_name = InputSetNameDialog(self)
@@ -150,11 +191,11 @@ class FlashcardWindow(QMainWindow):
         # Refreshing flashcards sets list
         return self._setupListSets()
 
-    def _importSet(self) -> Callable:
+    def _importSet(self) -> None:
         """Responsible for importing set from csv file."""
         # Opening dialog and getting file path
         file_path, _ = QFileDialog.getOpenFileName(
-            self, 'Open set', '~', 'Data (*.csv)')
+            self, 'Open set..', '~', 'Data (*.csv)')
         # Trying to import flashcards set to session
         try:
             import_obj = Import()
@@ -164,6 +205,19 @@ class FlashcardWindow(QMainWindow):
             ErrorDialog(str(e), parent=self)
         # Refreshing flashcards sets list
         return self._setupListSets()
+
+    def _exportSet(self) -> None:
+        """Responsible for exporting opened set to the csv file."""
+        # Accessing the opened flashcards set
+        flashcards_set: FlashcardsSet = self.session.opened_set
+        # Opening dialog to get directory
+        directory = QFileDialog.getExistingDirectory(self, 'Save set...')
+        # Trying to save flashcards set
+        try:
+            export_obj = Export()
+            export_obj.write_flashcards_set_to_csv(flashcards_set, directory)
+        except Exception as e:
+            ErrorDialog(str(e))
 
     def _setupFlashcardsSetPage(self, flashcards_set: FlashcardsSet) -> None:
         """Setups GUI to show given flashcards set."""
@@ -181,7 +235,7 @@ class FlashcardWindow(QMainWindow):
         # 5. Changing home page -> set page
         self.ui.stack_1.setCurrentIndex(1)
 
-    def _createNewFlashcard(self) -> Callable:
+    def _createNewFlashcard(self) -> None:
         """Creates new flashcard from the data given sender's parent widget
            and adds it to opened flashcards set."""
         # Determining the sender
@@ -222,13 +276,13 @@ class FlashcardWindow(QMainWindow):
         self.ui.btn_previous_flashcard.setEnabled(
             not self.session.opened_set.is_empty())
 
-    def _loadFlashcard(self, clicked=False) -> None:
+    def _loadFlashcard(self, clicked: bool = False) -> None:
         """Loads opened flashcard to slider"""
-        if self.session._opened_flashcard:
+        if self.session.opened_flashcard:
             # Setuping flashcard counter
             self.ui.lbl_flashcard_count.setText(
                 self.session.flashcard_counter_info())
-            # Setuping flashcard mode >clicked - showing definition<
+            # Setuping flashcard mode >clicked<
             self.ui.btn_flashcard.setChecked(clicked)
             if not clicked:
                 self.ui.btn_flashcard.setText(
@@ -237,13 +291,13 @@ class FlashcardWindow(QMainWindow):
                 self.ui.btn_flashcard.setText(
                     self.session.opened_flashcard.definition)
 
-    def _nextFlashcard(self) -> Callable:
+    def _nextFlashcard(self) -> None:
         """Loads next flashcard to slider."""
         self.session.next_flashcard()
         # Refreshing slider
         return self._loadFlashcard()
 
-    def _previousFlashcard(self) -> Callable:
+    def _previousFlashcard(self) -> None:
         """Loads previous flashcard to slider."""
         self.session.previous_flashcard()
         # Refreshing slider
@@ -314,7 +368,7 @@ class FlashcardWindow(QMainWindow):
         # Refreshing flashcards page
         self._setupFlashcardsSetPage(self.session.opened_set)
 
-    def _generateTest(self) -> Callable | None:
+    def _generateTest(self) -> None:
         """Generates test and conduct it"""
         # Gathering data to create test
         question_count = self._getTestSetup()
