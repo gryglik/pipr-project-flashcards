@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>850</width>
-    <height>730</height>
+    <height>726</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -55,7 +55,7 @@ QLabel#lbl_greet{
 }
 
 PushButton {
-	font-size: 20px;
+	font-size: 15px;
 	background-color: transparent;
 	border-width: 2px;
 	border-style: solid;
@@ -156,7 +156,7 @@ QListWidget#list_sets::item:selected{
           </property>
           <property name="minimumSize">
            <size>
-            <width>150</width>
+            <width>250</width>
             <height>0</height>
            </size>
           </property>
@@ -297,7 +297,7 @@ QListWidget#list_sets::item:selected{
         </size>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="home_page">
         <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -556,7 +556,7 @@ QListWidget#list_sets::item:selected{
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="">
+           <widget class="QWidget" name="layoutWidget">
             <layout class="QVBoxLayout" name="list_flashcards_options">
              <property name="spacing">
               <number>5</number>
@@ -594,6 +594,9 @@ QListWidget#list_sets::item:selected{
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Expanding</enum>
+                 </property>
                  <property name="sizeHint" stdset="0">
                   <size>
                    <width>40</width>
@@ -603,15 +606,21 @@ QListWidget#list_sets::item:selected{
                 </spacer>
                </item>
                <item>
-                <widget class="PushButton" name="pushButton">
+                <widget class="PushButton" name="btn_generate_test">
                  <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>120</width>
+                   <height>36</height>
+                  </size>
+                 </property>
                  <property name="text">
-                  <string>Generate Test</string>
+                  <string>Generate test</string>
                  </property>
                 </widget>
                </item>

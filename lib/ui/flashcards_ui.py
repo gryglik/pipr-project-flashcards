@@ -30,7 +30,7 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.setEnabled(True)
-        MainWindow.resize(850, 730)
+        MainWindow.resize(850, 726)
         MainWindow.setMinimumSize(QSize(850, 600))
         font = QFont()
         font.setFamilies([u"Futura"])
@@ -62,7 +62,7 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "PushButton {\n"
-"	font-size: 20px;\n"
+"	font-size: 15px;\n"
 "	background-color: transparent;\n"
 "	border-width: 2px;\n"
 "	border-style: solid;\n"
@@ -148,7 +148,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.list_sets.sizePolicy().hasHeightForWidth())
         self.list_sets.setSizePolicy(sizePolicy)
-        self.list_sets.setMinimumSize(QSize(150, 0))
+        self.list_sets.setMinimumSize(QSize(250, 0))
         font2 = QFont()
         font2.setFamilies([u"Futura"])
         font2.setKerning(True)
@@ -341,19 +341,19 @@ class Ui_MainWindow(object):
         self.verticalLayout_7.addWidget(self.flashcard_options)
 
         self.splitter_2.addWidget(self.slider_flashcards)
-        self.widget = QWidget(self.splitter_2)
-        self.widget.setObjectName(u"widget")
-        self.list_flashcards_options = QVBoxLayout(self.widget)
+        self.layoutWidget = QWidget(self.splitter_2)
+        self.layoutWidget.setObjectName(u"layoutWidget")
+        self.list_flashcards_options = QVBoxLayout(self.layoutWidget)
         self.list_flashcards_options.setSpacing(5)
         self.list_flashcards_options.setObjectName(u"list_flashcards_options")
         self.list_flashcards_options.setContentsMargins(0, 0, 0, 0)
-        self.widget_new_flashcard = NewFlashcardWidget(self.widget)
+        self.widget_new_flashcard = NewFlashcardWidget(self.layoutWidget)
         self.widget_new_flashcard.setObjectName(u"widget_new_flashcard")
         self.widget_new_flashcard.setEnabled(True)
 
         self.list_flashcards_options.addWidget(self.widget_new_flashcard)
 
-        self.list_flashcards = QListWidget(self.widget)
+        self.list_flashcards = QListWidget(self.layoutWidget)
         self.list_flashcards.setObjectName(u"list_flashcards")
         sizePolicy7 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         sizePolicy7.setHorizontalStretch(0)
@@ -372,17 +372,21 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer_4)
 
-        self.pushButton = PushButton(self.widget)
-        self.pushButton.setObjectName(u"pushButton")
-        sizePolicy1.setHeightForWidth(self.pushButton.sizePolicy().hasHeightForWidth())
-        self.pushButton.setSizePolicy(sizePolicy1)
+        self.btn_generate_test = PushButton(self.layoutWidget)
+        self.btn_generate_test.setObjectName(u"btn_generate_test")
+        sizePolicy8 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy8.setHorizontalStretch(0)
+        sizePolicy8.setVerticalStretch(0)
+        sizePolicy8.setHeightForWidth(self.btn_generate_test.sizePolicy().hasHeightForWidth())
+        self.btn_generate_test.setSizePolicy(sizePolicy8)
+        self.btn_generate_test.setMinimumSize(QSize(120, 36))
 
-        self.horizontalLayout_2.addWidget(self.pushButton)
+        self.horizontalLayout_2.addWidget(self.btn_generate_test)
 
 
         self.list_flashcards_options.addLayout(self.horizontalLayout_2)
 
-        self.splitter_2.addWidget(self.widget)
+        self.splitter_2.addWidget(self.layoutWidget)
 
         self.verticalLayout_2.addWidget(self.splitter_2)
 
@@ -412,7 +416,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stack_1.setCurrentIndex(0)
+        self.stack_1.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -433,7 +437,7 @@ class Ui_MainWindow(object):
         self.btn_flashcard.setText("")
         self.btn_previous_flashcard.setText("")
         self.btn_next_flashcard.setText("")
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Generate Test", None))
+        self.btn_generate_test.setText(QCoreApplication.translate("MainWindow", u"Generate test", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
         self.menuStatistics.setTitle(QCoreApplication.translate("MainWindow", u"Statistics", None))

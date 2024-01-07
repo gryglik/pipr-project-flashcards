@@ -3,7 +3,7 @@ class EmptyStringError(Exception):
     pass
 
 
-class FlascardNotInSetError(Exception):
+class FlashcardNotInSetError(Exception):
     """Raised when trying to access the flashcard that is not in the set."""
     pass
 
@@ -35,4 +35,22 @@ class IndexOutOfRangeError(IndexError):
 
 class InvalidFlashcardError(Exception):
     """Raised when trying to load invalid flashcard from the file."""
+    pass
+
+
+class ClosedTestItemError(Exception):
+    """Raised when trying to get question or set answer of closed
+       test item."""
+    pass
+
+
+class TestNotStartedError(Exception):
+    """Raised when trying to access data that is available
+    only after test start."""
+    pass
+
+
+class TestNotFinishedError(Exception):
+    """Raised when trying to access data from Test that is available
+    only when test is finished."""
     pass

@@ -1,10 +1,12 @@
 import pytest
+from time import sleep
 
-from flashcards_logic import Flashcard, FlashcardsSet, Session
+from flashcards_logic import Flashcard, FlashcardsSet, TestItem, Session, Test, TestResult
 from lib.errors import (
-    EmptyStringError, FlascardNotInSetError, IndexOutOfRangeError,
+    EmptyStringError, FlashcardNotInSetError, IndexOutOfRangeError,
     StringTooLongError, SetNotInSessionError, NotOpenedSetError,
-    NotOpenedFlashcardError
+    NotOpenedFlashcardError, ClosedTestItemError, TestNotStartedError,
+    TestNotFinishedError
     )
 
 
@@ -127,7 +129,7 @@ def test_FlashcardsSet_remove_not_existing_flashcard():
     flashcard2 = Flashcard('dog', 'pies')
     flashcards_set = FlashcardsSet('set1', [flashcard1, flashcard2])
     assert len(flashcards_set.flashcards) == 2
-    with pytest.raises(FlascardNotInSetError):
+    with pytest.raises(FlashcardNotInSetError):
         flashcards_set.remove_flashcard(Flashcard('cow', 'krowa'))
 
 
@@ -143,7 +145,7 @@ def test_FlashcardsSet_flashcard_index_not_in_the_set():
     flashcard2 = Flashcard('dog', 'pies')
     flashcard3 = Flashcard('cow', 'krowa')
     flashcards_set = FlashcardsSet('set1', [flashcard1, flashcard2])
-    with pytest.raises(FlascardNotInSetError):
+    with pytest.raises(FlashcardNotInSetError):
         flashcards_set.flashcard_index(flashcard3)
 
 
@@ -156,11 +158,260 @@ def test_FlashcardsSet_len_typical():
     assert flashcards_set.len() == 3
 
 
-def test_FlashcardsSet_isEmpty_typical():
+def test_FlashcardsSet_is_empty_typical():
     flashcards_set = FlashcardsSet('set1')
     assert flashcards_set.is_empty()
     flashcards_set.add_flashcard(Flashcard('cat', 'kot'))
     assert not flashcards_set.is_empty()
+
+
+def test_FlashcardsSet_draw_flashcards_typical():
+    flashcard1 = Flashcard('cat', 'kot')
+    flashcard2 = Flashcard('dog', 'pies')
+    flashcard3 = Flashcard('cow', 'krowa')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1, flashcard2, flashcard3])
+    drawn_flashcards_set = flashcards_set.draw_flashcards(2)
+    assert drawn_flashcards_set.name == 'set1'
+    assert drawn_flashcards_set.len() == 2
+    flashcards = drawn_flashcards_set.flashcards
+    assert flashcard1 in flashcards or flashcard2 in flashcards
+
+
+def test_FlashcardsSet_draw_flashcards_empty_set():
+    flashcards_set = FlashcardsSet('set1')
+    with pytest.raises(IndexOutOfRangeError):
+        flashcards_set.draw_flashcards(3)
+
+
+def test_FlashcardsSet_draw_flashcards_invalid_count():
+    flashcard1 = Flashcard('cat', 'kot')
+    flashcard2 = Flashcard('dog', 'pies')
+    flashcard3 = Flashcard('cow', 'krowa')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1, flashcard2, flashcard3])
+    flashcards_set.draw_flashcards(3)
+    with pytest.raises(IndexOutOfRangeError):
+        flashcards_set.draw_flashcards(4)
+    with pytest.raises(IndexOutOfRangeError):
+        flashcards_set.draw_flashcards(0)
+    with pytest.raises(IndexOutOfRangeError):
+        flashcards_set.draw_flashcards(-1)
+
+
+def test_TestItem_get_question_typical():
+    flashcard = Flashcard('cat', 'kot')
+    test_item = TestItem(flashcard)
+    assert not test_item.is_opened()
+    test_item.open()
+    assert test_item.get_question() == 'cat'
+
+
+def test_TestItem_get_question_not_opened():
+    flashcard = Flashcard('cat', 'kot')
+    test_item = TestItem(flashcard)
+    assert not test_item.is_opened()
+    with pytest.raises(ClosedTestItemError):
+        test_item.get_question()
+
+
+def test_TestItem_set_correct_answer_and_result_typical():
+    flashcard = Flashcard('cat', 'kot')
+    test_item = TestItem(flashcard)
+    test_item.open()
+    assert test_item.get_question() == 'cat'
+    test_item.set_answer('kot')
+    assert test_item.result()
+    assert not test_item.is_opened()
+
+
+def test_TestItem_set_wrong_answer_and_result_typical():
+    flashcard = Flashcard('cat', 'kot')
+    test_item = TestItem(flashcard)
+    test_item.open()
+    assert test_item.get_question() == 'cat'
+    test_item.set_answer('pies')
+    assert not test_item.result()
+    assert not test_item.is_opened()
+
+
+def test_TestItem_set_answer_after_closed():
+    flashcard = Flashcard('cat', 'kot')
+    test_item = TestItem(flashcard)
+    test_item.open()
+    assert test_item.get_question() == 'cat'
+    test_item.set_answer('pies')
+    assert not test_item.result()
+    with pytest.raises(ClosedTestItemError):
+        test_item.set_answer('kot')
+
+
+def test_TestItem_question_definition_typical():
+    flashcard = Flashcard('cat', 'kot')
+    test_item = TestItem(flashcard, mode=1)
+    test_item.open()
+    assert test_item.get_question() == 'kot'
+    test_item.set_answer('cat')
+    assert test_item.result()
+    assert not test_item.is_opened()
+
+
+def test_Test_start_test_typical():
+    flashcard1 = Flashcard('cat', 'kot')
+    flashcard2 = Flashcard('dog', 'pies')
+    flashcard3 = Flashcard('cow', 'krowa')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1, flashcard2, flashcard3])
+    test = Test(flashcards_set)
+    assert test.name() == 'set1'
+    assert not test.is_started()
+    test.start()
+    assert test.is_started()
+
+
+def test_Test_empty_flashcards_set():
+    flashcards_set = FlashcardsSet('set')
+    with pytest.raises(FlashcardNotInSetError):
+        Test(flashcards_set)
+
+
+def test_Test_get_test():
+    flashcard1 = Flashcard('cat', 'kot')
+    flashcard2 = Flashcard('dog', 'pies')
+    flashcard3 = Flashcard('cow', 'krowa')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1, flashcard2, flashcard3])
+    test = Test(flashcards_set)
+    test.start()
+    test_items = test.get_test()
+    assert test_items[0].get_question() == 'cat'
+    assert test_items[2].get_question() == 'cow'
+
+
+def test_Test_solve_test_typical():
+    flashcard1 = Flashcard('cat', 'kot')
+    flashcard2 = Flashcard('dog', 'pies')
+    flashcard3 = Flashcard('cow', 'krowa')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1, flashcard2, flashcard3])
+    test = Test(flashcards_set)
+    test.start()
+    test_items = test.get_test()
+    assert test_items[0].get_question() == 'cat'
+    assert test_items[2].get_question() == 'cow'
+    test_items[0].set_answer('kot')
+    test_items[2].set_answer('krowa')
+    assert test.result().get_correct_answers_count() == 2
+    assert test.result().get_questions_count() == 3
+
+
+def test_Test_solve_test_auto_close():
+    flashcard1 = Flashcard('cat', 'kot')
+    flashcard2 = Flashcard('dog', 'pies')
+    flashcard3 = Flashcard('cow', 'krowa')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1, flashcard2, flashcard3])
+    test = Test(flashcards_set)
+    test.start()
+    assert test.is_started()
+    test_items = test.get_test()
+    assert test_items[0].get_question() == 'cat'
+    assert test_items[2].get_question() == 'cow'
+    test_items[0].set_answer('kot')
+    test_items[2].set_answer('krowa')
+    test.close()
+    assert test.result().get_correct_answers_count() == 2
+    assert test.result().get_questions_count() == 3
+
+
+def test_Test_time_typical():
+    flashcard1 = Flashcard('cat', 'kot')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1])
+    test = Test(flashcards_set)
+    test.start()
+    sleep(2)
+    test.close()
+    assert test.time() == pytest.approx(2.0, 0.1)
+
+
+def test_Test_time_during_test():
+    flashcard1 = Flashcard('cat', 'kot')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1])
+    test = Test(flashcards_set)
+    test.start()
+    sleep(2)
+    assert test.time() == pytest.approx(2.0, 0.1)
+
+
+def test_Test_time_test_not_started():
+    flashcard1 = Flashcard('cat', 'kot')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1])
+    test = Test(flashcards_set)
+    sleep(2)
+    with pytest.raises(TestNotStartedError):
+        test.time()
+
+
+def test_Test_change_test_after_closing():
+    flashcard1 = Flashcard('cat', 'kot')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1])
+    test = Test(flashcards_set)
+    test.start()
+    test_items = test.get_test()
+    assert test_items[0].get_question() == 'cat'
+    test_items[0].set_answer('kotek')
+    assert test.result().get_correct_answers_count() == 0
+    assert test.result().get_questions_count() == 1
+    with pytest.raises(ClosedTestItemError):
+        test_items[0].set_answer('kot')
+    assert test.result().get_correct_answers_count() == 0
+    assert test.result().get_questions_count() == 1
+
+
+def test_Test_is_finished():
+    flashcard1 = Flashcard('cat', 'kot')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1])
+    test = Test(flashcards_set)
+    assert not test.is_finished()
+    test.start()
+    assert not test.is_finished()
+    test.close()
+    assert test.is_finished()
+
+
+def test_TestResult_typical():
+    flashcard1 = Flashcard('cat', 'kot')
+    flashcard2 = Flashcard('dog', 'pies')
+    flashcard3 = Flashcard('cow', 'krowa')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1, flashcard2, flashcard3])
+    test = Test(flashcards_set)
+    test.start()
+    test_items = test.get_test()
+    test_items[0].set_answer('kot')
+    test_items[2].set_answer('krowa')
+    sleep(2)
+    test_result: TestResult = test.result()
+    assert test_result.get_correct_answers_count() == 2
+    assert test_result.get_incorrect_answers_count() == 1
+    assert test_result.get_questions_count() == 3
+    assert test_result.get_accuracy() == pytest.approx(66.66, 0.01)
+    assert test_result.get_duration() == pytest.approx(2.0, 0.1)
+    assert test_result.get_time_per_question() == pytest.approx(0.66, 0.1)
+
+
+def test_TestResult_test_not_finished():
+    flashcard1 = Flashcard('cat', 'kot')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1])
+    test = Test(flashcards_set)
+    with pytest.raises(TestNotFinishedError):
+        test.result()
 
 
 def test_Session_create_typical():
@@ -406,7 +657,7 @@ def test_Session_countr_info_no_opened_set():
     assert session.flashcard_counter_info() == '0 / 0'
 
 
-def test_Session_countr_info_no_opened_flashcard():
+def test_Session_counter_info_no_opened_flashcard():
     flashcard_1 = Flashcard('cat', 'kot')
     flashcard_2 = Flashcard('dog', 'pies')
     flashcard_3 = Flashcard('cow', 'krowa')
@@ -416,3 +667,47 @@ def test_Session_countr_info_no_opened_flashcard():
     session.add_set(flashcards_set)
     session.open_set(flashcards_set)
     assert session.flashcard_counter_info() == '0 / 3'
+
+
+def test_Session_generate_test_typical():
+    flashcard_1 = Flashcard('cat', 'kot')
+    flashcard_2 = Flashcard('dog', 'pies')
+    flashcard_3 = Flashcard('cow', 'krowa')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard_1, flashcard_2, flashcard_3])
+    session = Session('user')
+    session.add_set(flashcards_set)
+    session.open_set(flashcards_set)
+    test = session.generate_test(2)
+    test.start()
+    assert test.result().get_correct_answers_count() == 0
+    assert test.result().get_questions_count() == 2
+
+
+def test_Session_generate_test_not_opened_set():
+    flashcard_1 = Flashcard('cat', 'kot')
+    flashcard_2 = Flashcard('dog', 'pies')
+    flashcard_3 = Flashcard('cow', 'krowa')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard_1, flashcard_2, flashcard_3])
+    session = Session('user')
+    session.add_set(flashcards_set)
+    with pytest.raises(NotOpenedSetError):
+        session.generate_test(2)
+
+
+def test_Session_generate_test_invalid_question_count():
+    flashcard_1 = Flashcard('cat', 'kot')
+    flashcard_2 = Flashcard('dog', 'pies')
+    flashcard_3 = Flashcard('cow', 'krowa')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard_1, flashcard_2, flashcard_3])
+    session = Session('user')
+    session.add_set(flashcards_set)
+    session.open_set(flashcards_set)
+    with pytest.raises(IndexOutOfRangeError):
+        session.generate_test(4)
+    with pytest.raises(IndexOutOfRangeError):
+        session.generate_test(0)
+    with pytest.raises(IndexOutOfRangeError):
+        session.generate_test(-1)

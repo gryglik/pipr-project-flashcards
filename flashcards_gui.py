@@ -2,15 +2,16 @@ import sys
 from typing import Callable
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QListWidgetItem, QFileDialog, QErrorMessage)
+    QApplication, QMainWindow, QListWidgetItem, QFileDialog)
 
 from lib.ui.flashcards_ui import Ui_MainWindow
 from lib.ui.widgets_basic import PushButton, ErrorDialog
-from lib.ui.widgets import (
-    ListFlashcardsWidget, ListSetsWidget, InputSetNameDialog,
-    InputUsernameDialog)
+from lib.ui.widgets import ListFlashcardsWidget, ListSetsWidget
+from lib.ui.dialogs import (
+    InputSetNameDialog, InputUsernameDialog, GenerateTestDialog,
+    ConductTestDialog)
 
-from flashcards_logic import Session, FlashcardsSet, Flashcard
+from flashcards_logic import Session, FlashcardsSet, Flashcard, Test
 
 from flashcards_io import Import
 
@@ -18,13 +19,36 @@ from flashcards_io import Import
 class FlashcardWindow(QMainWindow):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.ui = self._initialiseUi()
-        self.session = self._initialiseSession()
+        self.ui: Ui_MainWindow = self._initialiseUi()
+        self.session: Session = self._initialiseSession()
         self.setWindowTitle(f'Flashcards - {self.session.username}')
         self._initialiseHomePage()
         # Initialising first flashcards set
         self.session.add_set(FlashcardsSet('My first set.'))
         self._setupListSets()
+
+    def _initialiseSession(self) -> Session:
+        """Initialises session."""
+        session = None
+        # Trying to create a session
+        while not session:
+            try:
+                session = Session(self._getUsername())
+                return session
+            except Exception as e:
+                ErrorDialog(str(e), parent=self)
+
+    def _getUsername(self) -> str:
+        """Returns username provided by the user."""
+        # Opening dialog
+        dlg_get_username = InputUsernameDialog(parent=self)
+        dlg_get_username.exec()
+        # Closing application if rejected dialog
+        if not dlg_get_username.result():
+            sys.exit()
+        # Getting username value
+        username = dlg_get_username.ui.fld_username.text()
+        return username
 
     def _initialiseUi(self) -> Ui_MainWindow:
         """Initialises GUI."""
@@ -47,65 +71,13 @@ class FlashcardWindow(QMainWindow):
             self._createNewFlashcard)
         ui.widget_new_flashcard.ui.btn_cancel_flashcard.clicked.connect(
             self._eraseNewFlashcard)
+        ui.btn_generate_test.clicked.connect(self._generateTest)
         return ui
-
-    def _initialiseSession(self) -> Session:
-        """Initialises session."""
-        session = None
-        # Trying to create a session
-        while not session:
-            try:
-                session = Session(self._getUsername())
-                return session
-            except Exception as e:
-                ErrorDialog(str(e), parent=self)
-
-    def _getUsername(self) -> str:
-        """Returns username provided by the user."""
-        # Opening dialog
-        dlg_get_username = InputUsernameDialog(self)
-        dlg_get_username.exec()
-        # Closing application if rejected dialog
-        if not dlg_get_username.result():
-            sys.exit()
-        # Getting username value
-        username = dlg_get_username.ui.fld_username.text()
-        return username
 
     def _initialiseHomePage(self) -> None:
         """Initialisises home page."""
         self.ui.stack_1.setCurrentIndex(0)
         self.ui.lbl_greet.setText(f'Hi {self.session.username}')
-
-    def _createNewSet(self) -> Callable:
-        """Creates a new set and refreshes sets list."""
-        # Opening dialog
-        dlg_set_name = InputSetNameDialog(self)
-        dlg_set_name.exec()
-        # Getting set name value
-        set_name = dlg_set_name.ui.lineEdit.text()
-        # Adding a new flashcards set to flashcards sets in session
-        try:
-            self.session.add_set(FlashcardsSet(set_name))
-        except Exception as e:
-            ErrorDialog(str(e), parent=self)
-        # Refreshing flashcards sets list
-        return self._setupListSets()
-
-    def _importSet(self) -> Callable:
-        """Responsible for importing set from csv file."""
-        # Opening dialog and getting file path
-        file_path, _ = QFileDialog.getOpenFileName(
-            self, 'Open set', '~', 'Data (*.csv)')
-        # Trying to import flashcards set to session
-        try:
-            import_obj = Import()
-            flashcards_set = import_obj.load_flashcards_set_from_csv(file_path)
-            self.session.add_set(flashcards_set)
-        except Exception as e:
-            ErrorDialog(str(e), parent=self)
-        # Refreshing flashcards sets list
-        return self._setupListSets()
 
     def _setupListSets(self) -> None:
         """Refreshes flashcards sets list."""
@@ -162,6 +134,37 @@ class FlashcardWindow(QMainWindow):
             ErrorDialog(str(e), parent=list_sets_widget)
         self._setupListSets()
 
+    def _createNewSet(self) -> Callable:
+        """Creates a new set and refreshes sets list."""
+        # Opening dialog
+        dlg_set_name = InputSetNameDialog(self)
+        dlg_set_name.exec()
+        # Getting set name value
+        set_name = dlg_set_name.ui.lineEdit.text()
+        # Adding a new flashcards set to flashcards sets in session
+        if dlg_set_name.result():
+            try:
+                self.session.add_set(FlashcardsSet(set_name))
+            except Exception as e:
+                ErrorDialog(str(e), parent=self)
+        # Refreshing flashcards sets list
+        return self._setupListSets()
+
+    def _importSet(self) -> Callable:
+        """Responsible for importing set from csv file."""
+        # Opening dialog and getting file path
+        file_path, _ = QFileDialog.getOpenFileName(
+            self, 'Open set', '~', 'Data (*.csv)')
+        # Trying to import flashcards set to session
+        try:
+            import_obj = Import()
+            flashcards_set = import_obj.load_flashcards_set_from_csv(file_path)
+            self.session.add_set(flashcards_set)
+        except Exception as e:
+            ErrorDialog(str(e), parent=self)
+        # Refreshing flashcards sets list
+        return self._setupListSets()
+
     def _setupFlashcardsSetPage(self, flashcards_set: FlashcardsSet) -> None:
         """Setups GUI to show given flashcards set."""
         # 1. Clearing list of flashcards
@@ -178,6 +181,33 @@ class FlashcardWindow(QMainWindow):
         # 5. Changing home page -> set page
         self.ui.stack_1.setCurrentIndex(1)
 
+    def _createNewFlashcard(self) -> Callable:
+        """Creates new flashcard from the data given sender's parent widget
+           and adds it to opened flashcards set."""
+        # Determining the sender
+        btn_create_new_flashcard: PushButton = self.sender()
+        # Determining the sender's parent
+        widget: ListFlashcardsWidget = btn_create_new_flashcard.parent()
+        try:
+            flashcard = Flashcard(
+                widget.ui.fld_phrase.text(),
+                widget.ui.fld_definition.text(),
+                widget.ui.rbtn_priority.isChecked()
+            )
+            self.session.opened_set.add_flashcard(flashcard)
+        except Exception as e:
+            ErrorDialog(str(e), parent=widget)
+        # Erasing widget
+        self._eraseNewFlashcard()
+        # Refreshing Flashcards page
+        self._setupFlashcardsSetPage(self.session.opened_set)
+
+    def _eraseNewFlashcard(self) -> None:
+        """Erases widget responsible for creating new flashcard."""
+        self.ui.widget_new_flashcard.ui.fld_definition.setText('')
+        self.ui.widget_new_flashcard.ui.fld_phrase.setText('')
+        self.ui.widget_new_flashcard.ui.rbtn_priority.setEnabled(False)
+
     def _setupSliderFlashcards(self) -> None:
         """Setups first flashcard on slider."""
         if not self.session.opened_set.is_empty():
@@ -191,24 +221,6 @@ class FlashcardWindow(QMainWindow):
             not self.session.opened_set.is_empty())
         self.ui.btn_previous_flashcard.setEnabled(
             not self.session.opened_set.is_empty())
-
-    def _setupListFlashcards(self) -> None:
-        """Refreshes flashcards list."""
-        for flashcard in self.session.opened_set.flashcards:
-            # Creating item of list of flashcards
-            list_flashcards_item = QListWidgetItem()
-            list_flashcards_item.setFlags(
-                list_flashcards_item.flags() ^ Qt.ItemFlag.ItemIsSelectable)
-            self.ui.list_flashcards.addItem(list_flashcards_item)
-            # Setuping item using widget
-            widget = ListFlashcardsWidget(
-                flashcard, parent=self.ui.list_flashcards)
-            self.ui.list_flashcards.setItemWidget(list_flashcards_item, widget)
-            list_flashcards_item.setSizeHint(widget.sizeHint())
-            # Binding actions to buttons
-            widget.ui.btn_edit_flashcard.clicked.connect(self._editFlashcard)
-            widget.ui.btn_delete_flashcard.clicked.connect(
-                self._deleteFlashcard)
 
     def _loadFlashcard(self, clicked=False) -> None:
         """Loads opened flashcard to slider"""
@@ -237,32 +249,23 @@ class FlashcardWindow(QMainWindow):
         # Refreshing slider
         self._loadFlashcard()
 
-    def _createNewFlashcard(self) -> Callable:
-        """Creates new flashcard from the data given sender's parent widget
-           and adds it to opened flashcards set."""
-        # Determining the sender
-        btn_create_new_flashcard: PushButton = self.sender()
-        # Determining the sender's parent
-        widget: ListFlashcardsWidget = btn_create_new_flashcard.parent()
-        try:
-            flashcard = Flashcard(
-                widget.ui.fld_phrase.text(),
-                widget.ui.fld_definition.text(),
-                widget.ui.rbtn_priority.isChecked()
-            )
-            self.session.opened_set.add_flashcard(flashcard)
-        except Exception as e:
-            ErrorDialog(str(e), parent=widget)
-        # Erasing widget
-        self._eraseNewFlashcard()
-        # Refreshing Flashcards page
-        self._setupFlashcardsSetPage(self.session.opened_set)
-
-    def _eraseNewFlashcard(self) -> None:
-        """Erases widget responsible for creating new flashcard."""
-        self.ui.widget_new_flashcard.ui.fld_definition.setText('')
-        self.ui.widget_new_flashcard.ui.fld_phrase.setText('')
-        self.ui.widget_new_flashcard.ui.rbtn_priority.setEnabled(False)
+    def _setupListFlashcards(self) -> None:
+        """Refreshes flashcards list."""
+        for flashcard in self.session.opened_set.flashcards:
+            # Creating item of list of flashcards
+            list_flashcards_item = QListWidgetItem()
+            list_flashcards_item.setFlags(
+                list_flashcards_item.flags() ^ Qt.ItemFlag.ItemIsSelectable)
+            self.ui.list_flashcards.addItem(list_flashcards_item)
+            # Setuping item using widget
+            widget = ListFlashcardsWidget(
+                flashcard, parent=self.ui.list_flashcards)
+            self.ui.list_flashcards.setItemWidget(list_flashcards_item, widget)
+            list_flashcards_item.setSizeHint(widget.sizeHint())
+            # Binding actions to buttons
+            widget.ui.btn_edit_flashcard.clicked.connect(self._editFlashcard)
+            widget.ui.btn_delete_flashcard.clicked.connect(
+                self._deleteFlashcard)
 
     def _editFlashcard(self, checked: bool) -> None:
         """If checked enables editing flashcards provided by sender's parent
@@ -310,6 +313,32 @@ class FlashcardWindow(QMainWindow):
             ErrorDialog(str(e), parent=list_flashcards_widget)
         # Refreshing flashcards page
         self._setupFlashcardsSetPage(self.session.opened_set)
+
+    def _generateTest(self) -> Callable | None:
+        """Generates test and conduct it"""
+        # Gathering data to create test
+        question_count = self._getTestSetup()
+        # Trying to generate test
+        try:
+            test = self.session.generate_test(question_count)
+            self._conductTest(test)
+        except Exception as e:
+            ErrorDialog(str(e))
+
+    def _getTestSetup(self) -> int:
+        # Creating dialog to get questions count
+        dlg_question_count = GenerateTestDialog(parent=self)
+        dlg_question_count.exec()
+        question_count = dlg_question_count.ui.spnbx_questions_number.value()
+        return question_count
+
+    def _conductTest(self, test: Test) -> None:
+        """Responsible for conducting test."""
+        try:
+            dlg_test = ConductTestDialog(test, parent=self)
+        except Exception as e:
+            ErrorDialog(str(e))
+        dlg_test.exec()
 
 
 def guiMain(args):
