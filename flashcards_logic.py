@@ -1,7 +1,8 @@
 from __future__ import annotations
-import lib.errors as error
 import random
 import time
+
+import lib.errors as error
 
 
 class Flashcard():
@@ -119,9 +120,9 @@ class FlashcardsSet():
 class TestItem():
     def __init__(self, flashcard: Flashcard, mode: int = 0) -> None:
         """Creates an instance of test item which tests knowledge about one
-           flashcard.
-           mode = 0 - expected answer is flashcard's definition
-           mode = 1 - expected answer is flashcard's phrase"""
+        flashcard.
+            mode = 0 - expected answer is flashcard's definition \n
+            mode = 1 - expected answer is flashcard's phrase"""
         self._flashcard: Flashcard = flashcard
         self._opened: bool = False
         self._question: str | None = None
@@ -166,7 +167,7 @@ class TestItem():
 
     def result(self) -> bool:
         """Closes test item and return true if answear is correct
-        and false if incorrect."""
+    and false if incorrect."""
         self._opened = False
         return self._answer == self._user_answer
 
@@ -309,6 +310,7 @@ class Session():
         self._flashcards_sets: list[FlashcardsSet | None] = []
         self._opened_set: FlashcardsSet | None = None
         self._opened_flashcard: Flashcard | None = None
+        self._session_stats: SessionStats = SessionStats(self)
 
     @property
     def username(self) -> str:
@@ -336,15 +338,23 @@ class Session():
     def opened_flashcard(self) -> Flashcard:
         return self._opened_flashcard
 
+    def get_stats(self) -> SessionStats:
+        """Returns SessionStats object with statistics
+        about current session."""
+        return self._session_stats
+
     def add_set(self, flashcards_set: FlashcardsSet) -> None:
         """Adds given flashcards set to session."""
         self._flashcards_sets.append(flashcards_set)
 
     def remove_set(self, flashcards_set: FlashcardsSet) -> None:
-        """Removes given set from the session"""
+        """If open closes and removes from the session
+        or removes from the session."""
         if flashcards_set not in self.flashcards_sets:
             raise error.SetNotInSessionError(
                 'Given set is not in the session.')
+        elif flashcards_set == self._opened_set:
+            self.close_set()
         self._flashcards_sets.remove(flashcards_set)
 
     def open_set(self, flashcards_set: FlashcardsSet) -> None:
@@ -355,7 +365,8 @@ class Session():
         self._opened_set = flashcards_set
 
     def close_set(self) -> None:
-        """Closes opened set."""
+        """Closes opened set and flashcard"""
+        self._opened_flashcard = None
         self._opened_set = None
 
     def open_flashcard(self, index: int) -> None:
@@ -412,3 +423,23 @@ class Session():
         # Generating flashcards set with predefined questions count
         random_set = self.opened_set.draw_flashcards(count)
         return Test(random_set)
+
+
+class SessionStats():
+    """Keeps information about statistics of current session."""
+    def __init__(self, session: Session) -> None:
+        """Creates an instance of SessionStats."""
+        self._session: Session = session
+        self._start_time = time.time()
+
+    def get_time(self) -> float:
+        """Returns time in seconds since starting session."""
+        return time.time() - self._start_time
+
+    def flashcards_sets_count(self) -> int:
+        """Returns count of flashcards sets in the session."""
+        return len(self._session.flashcards_sets)
+
+    def flashcard_count(self) -> int:
+        flashcards_sets: list[FlashcardsSet] = self._session.flashcards_sets
+        return sum([flascards_set.len() for flascards_set in flashcards_sets])

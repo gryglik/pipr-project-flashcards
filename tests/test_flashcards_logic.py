@@ -1,7 +1,8 @@
 import pytest
 from time import sleep
 
-from flashcards_logic import Flashcard, FlashcardsSet, TestItem, Session, Test, TestResult
+from flashcards_logic import (
+    Flashcard, FlashcardsSet, TestItem, Session, Test, TestResult)
 from lib.errors import (
     EmptyStringError, FlashcardNotInSetError, IndexOutOfRangeError,
     StringTooLongError, SetNotInSessionError, NotOpenedSetError,
@@ -474,6 +475,21 @@ def test_Session_remove_set_not_in_session():
         session.remove_set(flashcards_set)
 
 
+def test_Session_remove_opened_set():
+    flashcard1 = Flashcard('cat', 'kot')
+    flashcards_set1 = FlashcardsSet('set1')
+    flashcards_set1.add_flashcard(flashcard1)
+    session = Session('user')
+    session.add_set(flashcards_set1)
+    session.open_set(flashcards_set1)
+    assert session.opened_set == flashcards_set1
+    session.open_flashcard(0)
+    assert session.opened_flashcard == flashcard1
+    session.remove_set(flashcards_set1)
+    assert not session.opened_flashcard
+    assert not session.opened_set
+
+
 def test_Session_open_set_typical():
     flashcards_set1 = FlashcardsSet('set1')
     flashcards_set2 = FlashcardsSet('set2')
@@ -504,6 +520,21 @@ def test_Session_close_set():
     assert session.opened_set == flashcards_set1
     session.close_set()
     assert not session.opened_set
+
+
+def test_Session_close_set_and_flashcard():
+    flashcard1 = Flashcard('cat', 'kot')
+    flashcards_set1 = FlashcardsSet('set1')
+    flashcards_set1.add_flashcard(flashcard1)
+    session = Session('user')
+    session.add_set(flashcards_set1)
+    session.open_set(flashcards_set1)
+    assert session.opened_set == flashcards_set1
+    session.open_flashcard(0)
+    assert session.opened_flashcard == flashcard1
+    session.close_set()
+    assert not session.opened_set
+    assert not session.opened_flashcard
 
 
 def test_Session_open_flashcard_typical():
@@ -646,7 +677,7 @@ def test_Session_flashcard_counter_info_typical():
     assert session.flashcard_counter_info() == '2 / 3'
 
 
-def test_Session_countr_info_no_opened_set():
+def test_Session_counter_info_no_opened_set():
     flashcard_1 = Flashcard('cat', 'kot')
     flashcard_2 = Flashcard('dog', 'pies')
     flashcard_3 = Flashcard('cow', 'krowa')
@@ -711,3 +742,21 @@ def test_Session_generate_test_invalid_question_count():
         session.generate_test(0)
     with pytest.raises(IndexOutOfRangeError):
         session.generate_test(-1)
+
+
+def test_SessionStats_typical():
+    flashcard_1 = Flashcard('cat', 'kot')
+    flashcard_2 = Flashcard('dog', 'pies')
+    flashcard_3 = Flashcard('cow', 'krowa')
+    flashcards_set_1 = FlashcardsSet(
+        'set1', [flashcard_1, flashcard_2])
+    session = Session('user')
+    flashcards_set_2 = FlashcardsSet(
+        'set2', [flashcard_3])
+    session.add_set(flashcards_set_1)
+    session.add_set(flashcards_set_2)
+    session_stats = session.get_stats()
+    sleep(5)
+    assert session_stats.get_time() == pytest.approx(5, 0.1)
+    assert session_stats.flashcard_count() == 3
+    assert session_stats.flashcards_sets_count() == 2
