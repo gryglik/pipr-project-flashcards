@@ -34,3 +34,28 @@ class Import():
         with open(path) as fp:
             name, _ = splitext(basename(path))
             return self._loadFlashcardsSetFromCsv(fp, name)
+
+
+class Export():
+    """Export object responsible for exporting data from file"""
+    def __init__(self) -> None:
+        """Creates an instance of Export object"""
+        pass
+
+    def _writeFlashcardsSetToCsv(
+            self, flashcards_set: FlashcardsSet, fp: TextIO) -> None:
+        """Writes flashcards set to the given csv file object"""
+        writer = csv.DictWriter(fp, ['phrase', 'definition', 'priority'])
+        writer.writeheader()
+        for flashcard in flashcards_set.flashcards:
+            writer.writerow({
+                'phrase': flashcard.phrase,
+                'definition': flashcard.definition,
+                'priority': flashcard.priority
+            })
+
+    def write_flashcards_set_to_csv(
+            self, flashcards_set: FlashcardsSet, directory: str) -> None:
+        """Saves flashcards set to csv file in given path"""
+        with open(f'{directory}/{flashcards_set.name}.csv', 'w') as fp:
+            self._writeFlashcardsSetToCsv(flashcards_set, fp)
