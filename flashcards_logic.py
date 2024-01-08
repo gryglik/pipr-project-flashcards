@@ -381,6 +381,16 @@ class Session():
         """Closes opened flashcard."""
         self._opened_flashcard = None
 
+    def remove_flashcard(self, flashcard: Flashcard) -> None:
+        """If flashcard is open, closes it and removes from the opened set else
+        removes from the opened set."""
+        if not self._opened_set:
+            raise error.NotOpenedSetError(
+                'Cannot remove flashcard. Not set is opened.')
+        if flashcard == self._opened_flashcard:
+            self.close_flashcard()
+        self._opened_set.remove_flashcard(flashcard)
+
     def flashcard_index(self) -> int:
         """Returns opened flashcard's index in the flashcards set."""
         if self.opened_flashcard:

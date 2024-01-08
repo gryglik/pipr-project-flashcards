@@ -31,7 +31,7 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.setEnabled(True)
-        MainWindow.resize(850, 730)
+        MainWindow.resize(886, 685)
         MainWindow.setMinimumSize(QSize(850, 600))
         font = QFont()
         font.setFamilies([u"Futura"])
@@ -333,14 +333,20 @@ class Ui_MainWindow(object):
         self.verticalLayout_3 = QVBoxLayout(self.slider_flashcards)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setSpacing(5)
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.btn_homepage = PushButton(self.slider_flashcards)
         self.btn_homepage.setObjectName(u"btn_homepage")
+        self.btn_homepage.setMinimumSize(QSize(50, 36))
         icon4 = QIcon()
         icon4.addFile(u":/lib/ui/icons/home.png", QSize(), QIcon.Normal, QIcon.Off)
         self.btn_homepage.setIcon(icon4)
 
         self.horizontalLayout_5.addWidget(self.btn_homepage)
+
+        self.horizontalSpacer_6 = QSpacerItem(100, 20, QSizePolicy.Preferred, QSizePolicy.Minimum)
+
+        self.horizontalLayout_5.addItem(self.horizontalSpacer_6)
 
         self.lbl_flashcard_count = QLabel(self.slider_flashcards)
         self.lbl_flashcard_count.setObjectName(u"lbl_flashcard_count")
@@ -353,10 +359,15 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_5.addWidget(self.lbl_flashcard_count)
 
-        self.pushButton_2 = PushButton(self.slider_flashcards)
-        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.btn_reverse = PushButton(self.slider_flashcards)
+        self.btn_reverse.setObjectName(u"btn_reverse")
+        self.btn_reverse.setMinimumSize(QSize(150, 36))
+        icon5 = QIcon()
+        icon5.addFile(u":/lib/ui/icons/reverse.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.btn_reverse.setIcon(icon5)
+        self.btn_reverse.setCheckable(True)
 
-        self.horizontalLayout_5.addWidget(self.pushButton_2)
+        self.horizontalLayout_5.addWidget(self.btn_reverse)
 
 
         self.verticalLayout_3.addLayout(self.horizontalLayout_5)
@@ -405,9 +416,9 @@ class Ui_MainWindow(object):
         self.btn_previous_flashcard.setSizePolicy(sizePolicy2)
         self.btn_previous_flashcard.setMinimumSize(QSize(36, 36))
         self.btn_previous_flashcard.setFont(font3)
-        icon5 = QIcon()
-        icon5.addFile(u":/lib/ui/icons/l_arrow.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.btn_previous_flashcard.setIcon(icon5)
+        icon6 = QIcon()
+        icon6.addFile(u":/lib/ui/icons/l_arrow.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.btn_previous_flashcard.setIcon(icon6)
 
         self.horizontalLayout_3.addWidget(self.btn_previous_flashcard)
 
@@ -418,9 +429,9 @@ class Ui_MainWindow(object):
         self.btn_next_flashcard.setSizePolicy(sizePolicy2)
         self.btn_next_flashcard.setMinimumSize(QSize(36, 36))
         self.btn_next_flashcard.setFont(font3)
-        icon6 = QIcon()
-        icon6.addFile(u":/lib/ui/icons/r_arrow.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.btn_next_flashcard.setIcon(icon6)
+        icon7 = QIcon()
+        icon7.addFile(u":/lib/ui/icons/r_arrow.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.btn_next_flashcard.setIcon(icon7)
 
         self.horizontalLayout_3.addWidget(self.btn_next_flashcard)
 
@@ -489,7 +500,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menuBar = QMenuBar(MainWindow)
         self.menuBar.setObjectName(u"menuBar")
-        self.menuBar.setGeometry(QRect(0, 0, 850, 37))
+        self.menuBar.setGeometry(QRect(0, 0, 886, 37))
         self.menuFile = QMenu(self.menuBar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.menuBar)
@@ -529,7 +540,7 @@ class Ui_MainWindow(object):
         self.lbl_time.setText(QCoreApplication.translate("MainWindow", u"Session time (hours:minutes):", None))
         self.btn_homepage.setText("")
         self.lbl_flashcard_count.setText(QCoreApplication.translate("MainWindow", u"0 / 0", None))
-        self.pushButton_2.setText("")
+        self.btn_reverse.setText(QCoreApplication.translate("MainWindow", u"reversed mode", None))
         self.btn_flashcard.setText("")
         self.btn_previous_flashcard.setText("")
         self.btn_next_flashcard.setText("")

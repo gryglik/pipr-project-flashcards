@@ -70,6 +70,7 @@ class FlashcardWindow(QMainWindow):
             lambda item: self._setupFlashcardsSetPage(item.flashcards_set))
         # - Previewing flashcards
         ui.btn_flashcard.clicked.connect(self._loadFlashcard)
+        ui.btn_reverse.toggled.connect(self._setupSliderFlashcards)
         ui.btn_previous_flashcard.clicked.connect(self._previousFlashcard)
         ui.btn_next_flashcard.clicked.connect(self._nextFlashcard)
         # - Creating new flashcard
@@ -265,10 +266,16 @@ class FlashcardWindow(QMainWindow):
     def _setupSliderFlashcards(self) -> None:
         """Setups first flashcard on slider."""
         if not self.session.opened_set.is_empty():
-            self.session.open_flashcard(0)
-            self._loadFlashcard()
+            if not self.session.opened_flashcard:
+                self.session.open_flashcard(0)
+            self._loadFlashcard(clicked=False)
         else:
+            # Updating flashcard counter
+            self.ui.lbl_flashcard_count.setText(
+                self.session.flashcard_counter_info())
+            # Setuping blank flashcard
             self.ui.btn_flashcard.setText('Create flashcard first')
+
         self.ui.btn_flashcard.setEnabled(
             not self.session.opened_set.is_empty())
         self.ui.btn_next_flashcard.setEnabled(
@@ -278,13 +285,15 @@ class FlashcardWindow(QMainWindow):
 
     def _loadFlashcard(self, clicked: bool = False) -> None:
         """Loads opened flashcard to slider"""
-        if self.session.opened_flashcard:
-            # Setuping flashcard counter
-            self.ui.lbl_flashcard_count.setText(
+        # Updating flashcard counter
+        self.ui.lbl_flashcard_count.setText(
                 self.session.flashcard_counter_info())
+        if self.session.opened_flashcard:
             # Setuping flashcard mode >clicked<
             self.ui.btn_flashcard.setChecked(clicked)
-            if not clicked:
+            # Determining reversion
+            reversed = self.ui.btn_reverse.isChecked()
+            if clicked == reversed:
                 self.ui.btn_flashcard.setText(
                     self.session.opened_flashcard.phrase)
             else:
@@ -357,12 +366,11 @@ class FlashcardWindow(QMainWindow):
         # Determining sender's parent
         sender_parent = btn_delete_flashcard.parent()
         list_flashcards_widget: ListFlashcardsWidget = sender_parent
-        # Accesing flashcard and set
+        # Accesing flashcard
         flashcard: Flashcard = list_flashcards_widget.flashcard
-        flashcards_set: FlashcardsSet = self.session.opened_set
         # Trying to remove flashcard from the flashcards set
         try:
-            flashcards_set.remove_flashcard(flashcard)
+            self.session.remove_flashcard(flashcard)
         except Exception as e:
             ErrorDialog(str(e), parent=list_flashcards_widget)
         # Refreshing flashcards page

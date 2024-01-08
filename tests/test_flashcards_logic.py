@@ -581,6 +581,41 @@ def test_Session_close_flashcard():
     assert not session.opened_flashcard
 
 
+def test_Session_remove_flashcard_typical():
+    flashcard_1 = Flashcard('cat', 'kot')
+    flashcard_2 = Flashcard('dog', 'pies')
+    flashcards_set = FlashcardsSet('set1', [flashcard_1, flashcard_2])
+    session = Session('user')
+    session.add_set(flashcards_set)
+    session.open_set(flashcards_set)
+    session.remove_flashcard(flashcard_1)
+    assert flashcard_1 not in session.opened_set.flashcards
+
+
+def test_Session_remove_flashcard_opened():
+    flashcard_1 = Flashcard('cat', 'kot')
+    flashcard_2 = Flashcard('dog', 'pies')
+    flashcards_set = FlashcardsSet('set1', [flashcard_1, flashcard_2])
+    session = Session('user')
+    session.add_set(flashcards_set)
+    session.open_set(flashcards_set)
+    session.open_flashcard(0)
+    assert session.opened_flashcard == flashcard_1
+    session.remove_flashcard(flashcard_1)
+    assert flashcard_1 not in session.opened_set.flashcards
+    assert not session.opened_flashcard
+
+
+def test_Session_remove_flashcard_closed_set():
+    flashcard_1 = Flashcard('cat', 'kot')
+    flashcard_2 = Flashcard('dog', 'pies')
+    flashcards_set = FlashcardsSet('set1', [flashcard_1, flashcard_2])
+    session = Session('user')
+    session.add_set(flashcards_set)
+    with pytest.raises(NotOpenedSetError):
+        session.remove_flashcard(flashcard_1)
+
+
 def test_Session_flashcard_index_typical():
     flashcard_1 = Flashcard('cat', 'kot')
     flashcard_2 = Flashcard('dog', 'pies')
