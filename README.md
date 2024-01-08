@@ -126,6 +126,7 @@ Projekt obejmuje **100 testów jednostkowych** sprawdzających kluczowe funkcjon
 ## Uruchomienie:
 ### Wymagania:
 - Python: 3.12.0 wraz z pakietami z pliku [requirements.txt](requirements.txt)
+- Instalacja rodziny czcionek: ['Futura'](lib/ui/Futura.ttc)
 ### Uruchomienie:
 - Aby uruchomić program należy uruchomić plik [flashcards_gui.py](flashcards_gui.py)
 - **UWAGA: OKNO STARTOWE MOŻE ZNAJDOWAĆ SIĘ POD INNYMI OKNAMI**
