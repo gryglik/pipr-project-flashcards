@@ -38,6 +38,10 @@ class InvalidFlashcardError(Exception):
     pass
 
 
+class InvalidTestItemMode(Exception):
+    """Raised when trying to set invalid test item mode"""
+
+
 class ClosedTestItemError(Exception):
     """Raised when trying to get question or set answer of closed
        test item."""

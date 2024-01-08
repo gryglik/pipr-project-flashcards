@@ -6,7 +6,8 @@ from PySide6.QtWidgets import (
 
 from lib.ui.flashcards_ui import Ui_MainWindow
 from lib.ui.widgets_basic import PushButton, ErrorDialog
-from lib.ui.widgets import ListFlashcardsWidget, ListSetsWidget
+from lib.ui.widgets import (
+    ListSetsWidget, ListFlashcardsWidget)
 from lib.ui.dialogs import (
     InputSetNameDialog, InputUsernameDialog, GenerateTestDialog,
     ConductTestDialog)
@@ -247,7 +248,7 @@ class FlashcardWindow(QMainWindow):
             flashcard = Flashcard(
                 widget.ui.fld_phrase.text(),
                 widget.ui.fld_definition.text(),
-                widget.ui.rbtn_priority.isChecked()
+                widget.ui.btn_priority.isChecked()
             )
             self.session.opened_set.add_flashcard(flashcard)
         except Exception as e:
@@ -261,7 +262,7 @@ class FlashcardWindow(QMainWindow):
         """Erases widget responsible for creating new flashcard."""
         self.ui.widget_new_flashcard.ui.fld_definition.setText('')
         self.ui.widget_new_flashcard.ui.fld_phrase.setText('')
-        self.ui.widget_new_flashcard.ui.rbtn_priority.setEnabled(False)
+        self.ui.widget_new_flashcard.ui.btn_priority.setChecked(False)
 
     def _setupSliderFlashcards(self) -> None:
         """Setups first flashcard on slider."""
@@ -314,6 +315,7 @@ class FlashcardWindow(QMainWindow):
 
     def _setupListFlashcards(self) -> None:
         """Refreshes flashcards list."""
+        # Adding flashcards
         for flashcard in self.session.opened_set.flashcards:
             # Creating item of list of flashcards
             list_flashcards_item = QListWidgetItem()
@@ -337,18 +339,19 @@ class FlashcardWindow(QMainWindow):
         # Determining the sender
         btn_edit_flashcard: PushButton = self.sender()
         # Determining the sender's parent
-        list_flashcards_item: ListFlashcardsWidget = btn_edit_flashcard.parent()
+        parent = btn_edit_flashcard.parent()
+        list_flashcards_item: ListFlashcardsWidget = parent
         # Enabling editing if checked
         # and disabling editing if not chcecked
         list_flashcards_item.ui.fld_phrase.setReadOnly(not checked)
         list_flashcards_item.ui.fld_definition.setReadOnly(not checked)
-        list_flashcards_item.ui.rbtn_priority.setEnabled(checked)
+        list_flashcards_item.ui.btn_priority.setEnabled(checked)
         # If not checked saving flashcards changes
         if not checked:
             flashcard: Flashcard = list_flashcards_item.flashcard
             new_phrase = list_flashcards_item.ui.fld_phrase.text()
             new_definition = list_flashcards_item.ui.fld_definition.text()
-            new_priority = list_flashcards_item.ui.rbtn_priority.isChecked()
+            new_priority = list_flashcards_item.ui.btn_priority.isChecked()
             try:
                 flashcard.phrase = new_phrase
                 flashcard.definition = new_definition
@@ -377,25 +380,29 @@ class FlashcardWindow(QMainWindow):
         self._setupFlashcardsSetPage(self.session.opened_set)
 
     def _generateTest(self) -> None:
-        """Generates test and conduct it"""
+        """Generates test and conducts it."""
         # Gathering data to create test
-        question_count = self._getTestSetup()
+        question_count, mode = self._getTestSetup()
         # Trying to generate test
         try:
-            test = self.session.generate_test(question_count)
+            test = self.session.generate_test(question_count, test_mode=mode)
             self._conductTest(test)
         except Exception as e:
             ErrorDialog(str(e))
 
-    def _getTestSetup(self) -> int:
+    def _getTestSetup(self) -> tuple[int, int]:
+        """Opens dialog and returns test setup parameters."""
         # Creating dialog to get questions count
-        dlg_question_count = GenerateTestDialog(parent=self)
-        dlg_question_count.exec()
-        question_count = dlg_question_count.ui.spnbx_questions_number.value()
-        return question_count
+        dlg_test_setup = GenerateTestDialog(parent=self)
+        dlg_test_setup.exec()
+        # Accessing question count
+        question_count = dlg_test_setup.ui.spnbx_questions_number.value()
+        # Accessing mode
+        mode = dlg_test_setup.ui.combx_quesion_mode.currentIndex()
+        return question_count, mode
 
     def _conductTest(self, test: Test) -> None:
-        """Responsible for conducting test."""
+        """Opens dialog and conducts test."""
         try:
             dlg_test = ConductTestDialog(test, parent=self)
         except Exception as e:

@@ -1,23 +1,13 @@
 import time
 from PySide6.QtWidgets import QWidget
 
+from lib.ui.widgets_ui.ListSetsWidget_ui import Ui_ListSetsWidget
 from lib.ui.widgets_ui.NewFlashcardWidget_ui import Ui_NewFlashcardsWidget
 from lib.ui.widgets_ui.ListFlashcardsWidget_ui import Ui_ListFlashcardsWidget
-from lib.ui.widgets_ui.ListSetsWidget_ui import Ui_ListSetsWidget
 from lib.ui.widgets_ui.ListTestWidget_ui import Ui_ListTestWidget
 from lib.ui.widgets_ui.TestSummaryWidget_ui import Ui_TestSummaryWidget
 
 from flashcards_logic import Flashcard, FlashcardsSet, Test, TestItem
-
-
-class NewFlashcardWidget(QWidget):
-    """Widget providing data to create new flashcard."""
-    def __init__(self, parent: QWidget | None = None) -> None:
-        """Creates an instance of NewFlashcardWidget."""
-        super().__init__(parent)
-        # Setuping ui
-        self.ui = Ui_NewFlashcardsWidget()
-        self.ui.setupUi(self)
 
 
 class ListSetsWidget(QWidget):
@@ -37,6 +27,16 @@ class ListSetsWidget(QWidget):
         self.ui.fld_set_name.setText(flashcards_set.name)
 
 
+class NewFlashcardWidget(QWidget):
+    """Widget providing data to create new flashcard."""
+    def __init__(self, parent: QWidget | None = None) -> None:
+        """Creates an instance of NewFlashcardWidget."""
+        super().__init__(parent)
+        # Setuping ui
+        self.ui = Ui_NewFlashcardsWidget()
+        self.ui.setupUi(self)
+
+
 class ListFlashcardsWidget(QWidget):
     """Widget representing flashcard data."""
     def __init__(
@@ -51,7 +51,7 @@ class ListFlashcardsWidget(QWidget):
         # Loading data
         self.ui.fld_phrase.setText(flashcard.phrase)
         self.ui.fld_definition.setText(flashcard.definition)
-        self.ui.rbtn_priority.setChecked(flashcard.priority)
+        self.ui.btn_priority.setChecked(flashcard.priority)
 
 
 class ListTestWidget(QWidget):

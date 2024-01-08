@@ -132,6 +132,9 @@ class TestItem():
 
     def _setup(self, mode: int) -> None:
         """Setups mode of the test item"""
+        if mode not in [0, 1]:
+            raise error.InvalidTestItemMode(
+                'Cannot create test item. Incorrect mode.')
         match mode:
             case 0:
                 self._question = self._flashcard.phrase
@@ -173,12 +176,15 @@ class TestItem():
 
 
 class Test():
-    def __init__(self, flashcards_set: FlashcardsSet) -> None:
-        """Creates an instance of a test for given flashcards set."""
+    def __init__(self, flashcards_set: FlashcardsSet, mode: int = 0) -> None:
+        """Creates an instance of a test for given flashcards set.\n
+            mode = 0 - expected answer is flashcard's definition\n
+            mode = 1 - expected answer is flashcard's phrase"""
         if flashcards_set.is_empty():
             raise error.FlashcardNotInSetError(
                 'Cannot create a test. Empty flashcards set.')
         self._flashcards_set: FlashcardsSet = flashcards_set
+        self._mode: int = mode
         self._test_items: list[TestItem] = self._generateTestItems()
         self._running: bool = None
         self._start_time: float | None = None
@@ -188,7 +194,7 @@ class Test():
         """Returns list of test items for test's flashcards set."""
         test_items = []
         for flashcard in self._flashcards_set._flashcards:
-            test_items.append(TestItem(flashcard))
+            test_items.append(TestItem(flashcard, mode=self._mode))
         return test_items
 
     def name(self) -> str:
@@ -424,15 +430,17 @@ class Session():
         return f'{self.flashcard_index() + 1} / {self._opened_set.len()}'
         # self.flashcard_index() + 1 to count from 1
 
-    def generate_test(self, count: int) -> Test:
+    def generate_test(self, count: int, test_mode: int) -> Test:
         """Generates a test with given count of flashcards from the opened
-        flashcards set."""
+        flashcards set.\n
+            mode = 0 - expected answer is flashcard's definition\n
+            mode = 1 - expected answer is flashcard's phrase"""
         if not self._opened_set:
             raise error.NotOpenedSetError(
                 'Cannot generate test. No set is open.')
         # Generating flashcards set with predefined questions count
         random_set = self.opened_set.draw_flashcards(count)
-        return Test(random_set)
+        return Test(random_set, mode=test_mode)
 
 
 class SessionStats():

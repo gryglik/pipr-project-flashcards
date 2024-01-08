@@ -7,7 +7,7 @@ from lib.errors import (
     EmptyStringError, FlashcardNotInSetError, IndexOutOfRangeError,
     StringTooLongError, SetNotInSessionError, NotOpenedSetError,
     NotOpenedFlashcardError, ClosedTestItemError, TestNotStartedError,
-    TestNotFinishedError
+    TestNotFinishedError, InvalidTestItemMode
     )
 
 
@@ -200,6 +200,12 @@ def test_FlashcardsSet_draw_flashcards_invalid_count():
         flashcards_set.draw_flashcards(-1)
 
 
+def test_TestItem_invalid_mode():
+    flashcard = Flashcard('cat', 'kot')
+    with pytest.raises(InvalidTestItemMode):
+        TestItem(flashcard, 2)
+
+
 def test_TestItem_get_question_typical():
     flashcard = Flashcard('cat', 'kot')
     test_item = TestItem(flashcard)
@@ -276,7 +282,7 @@ def test_Test_empty_flashcards_set():
         Test(flashcards_set)
 
 
-def test_Test_get_test():
+def test_Test_get_test_default_mode():
     flashcard1 = Flashcard('cat', 'kot')
     flashcard2 = Flashcard('dog', 'pies')
     flashcard3 = Flashcard('cow', 'krowa')
@@ -289,7 +295,20 @@ def test_Test_get_test():
     assert test_items[2].get_question() == 'cow'
 
 
-def test_Test_solve_test_typical():
+def test_Test_get_test_mode_1():
+    flashcard1 = Flashcard('cat', 'kot')
+    flashcard2 = Flashcard('dog', 'pies')
+    flashcard3 = Flashcard('cow', 'krowa')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1, flashcard2, flashcard3])
+    test = Test(flashcards_set, mode=1)
+    test.start()
+    test_items = test.get_test()
+    assert test_items[0].get_question() == 'kot'
+    assert test_items[2].get_question() == 'krowa'
+
+
+def test_Test_solve_test_default_mode():
     flashcard1 = Flashcard('cat', 'kot')
     flashcard2 = Flashcard('dog', 'pies')
     flashcard3 = Flashcard('cow', 'krowa')
@@ -302,6 +321,23 @@ def test_Test_solve_test_typical():
     assert test_items[2].get_question() == 'cow'
     test_items[0].set_answer('kot')
     test_items[2].set_answer('krowa')
+    assert test.result().get_correct_answers_count() == 2
+    assert test.result().get_questions_count() == 3
+
+
+def test_Test_solve_test_reversed_mode():
+    flashcard1 = Flashcard('cat', 'kot')
+    flashcard2 = Flashcard('dog', 'pies')
+    flashcard3 = Flashcard('cow', 'krowa')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1, flashcard2, flashcard3])
+    test = Test(flashcards_set, mode=1)
+    test.start()
+    test_items = test.get_test()
+    assert test_items[0].get_question() == 'kot'
+    assert test_items[2].get_question() == 'krowa'
+    test_items[0].set_answer('cat')
+    test_items[2].set_answer('cow')
     assert test.result().get_correct_answers_count() == 2
     assert test.result().get_questions_count() == 3
 

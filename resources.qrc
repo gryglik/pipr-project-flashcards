@@ -8,6 +8,8 @@
     <file>lib/ui/icons/import.png</file>
     <file>lib/ui/icons/l_arrow.png</file>
     <file>lib/ui/icons/plus.png</file>
+    <file>lib/ui/icons/empty_star.png</file>
+    <file>lib/ui/icons/full_star.png</file>
     <file>lib/ui/icons/r_arrow.png</file>
     <file>lib/ui/icons/ready.png</file>
     <file>lib/ui/icons/thrash.png</file>

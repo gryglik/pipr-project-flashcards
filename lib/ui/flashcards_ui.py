@@ -31,7 +31,7 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.setEnabled(True)
-        MainWindow.resize(886, 685)
+        MainWindow.resize(850, 726)
         MainWindow.setMinimumSize(QSize(850, 600))
         font = QFont()
         font.setFamilies([u"Futura"])
@@ -90,10 +90,15 @@ class Ui_MainWindow(object):
 "	border-width: 5px;\n"
 "}\n"
 "\n"
+"PushButton#btn_priority{\n"
+"	border-width: 0px;\n"
+"	background-color"
+                        ": transparent;\n"
+"}\n"
+"\n"
 "QListWidget {\n"
 "	background-color: transparent;\n"
-"	font-size: 20px"
-                        ";\n"
+"	font-size: 20px;\n"
 "}\n"
 "QListWidget{\n"
 "	border: 3px;\n"
@@ -111,6 +116,14 @@ class Ui_MainWindow(object):
 "	border-style: solid;\n"
 "	border-color: #9e5db8;\n"
 "	background-color: #e7d6ed\n"
+"}\n"
+"\n"
+"QWidget#list_flashcards_header{\n"
+"	background-color: white;\n"
+"}\n"
+"\n"
+"QWidget#container_lbl_sets{\n"
+"	background-color: white;\n"
 "}\n"
 "")
         self.actionImport_Flashcards_Set = QAction(MainWindow)
@@ -145,10 +158,19 @@ class Ui_MainWindow(object):
         self.verticalLayout.setSpacing(5)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.label_2 = QLabel(self.container_list_sets)
-        self.label_2.setObjectName(u"label_2")
+        self.container_lbl_sets = QWidget(self.container_list_sets)
+        self.container_lbl_sets.setObjectName(u"container_lbl_sets")
+        self.gridLayout_3 = QGridLayout(self.container_lbl_sets)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.gridLayout_3.setContentsMargins(12, 0, 0, 0)
+        self.lbl_sets = QLabel(self.container_lbl_sets)
+        self.lbl_sets.setObjectName(u"lbl_sets")
+        self.lbl_sets.setMinimumSize(QSize(0, 36))
 
-        self.verticalLayout.addWidget(self.label_2)
+        self.gridLayout_3.addWidget(self.lbl_sets, 0, 0, 1, 1)
+
+
+        self.verticalLayout.addWidget(self.container_lbl_sets)
 
         self.list_sets = QListWidget(self.container_list_sets)
         self.list_sets.setObjectName(u"list_sets")
@@ -233,6 +255,7 @@ class Ui_MainWindow(object):
         self.home_page.setObjectName(u"home_page")
         self.verticalLayout_4 = QVBoxLayout(self.home_page)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.verticalLayout_4.setContentsMargins(-1, 0, -1, 0)
         self.lbl_greet = QLabel(self.home_page)
         self.lbl_greet.setObjectName(u"lbl_greet")
         self.lbl_greet.setFont(font3)
@@ -243,7 +266,7 @@ class Ui_MainWindow(object):
         self.label.setObjectName(u"label")
         self.label.setMargin(0)
 
-        self.verticalLayout_4.addWidget(self.label)
+        self.verticalLayout_4.addWidget(self.label, 0, Qt.AlignHCenter)
 
         self.horizontalLayout_6 = QHBoxLayout()
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
@@ -301,14 +324,10 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_6.addWidget(self.statistics)
 
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout_6.addItem(self.horizontalSpacer_5)
-
 
         self.verticalLayout_4.addLayout(self.horizontalLayout_6)
 
-        self.verticalSpacer = QSpacerItem(20, 438, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer = QSpacerItem(20, 424, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.verticalLayout_4.addItem(self.verticalSpacer)
 
@@ -316,50 +335,28 @@ class Ui_MainWindow(object):
         self.flashcards_set_page = QWidget()
         self.flashcards_set_page.setObjectName(u"flashcards_set_page")
         self.flashcards_set_page.setEnabled(True)
-        self.verticalLayout_2 = QVBoxLayout(self.flashcards_set_page)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(10, 0, 0, 0)
-        self.splitter_2 = QSplitter(self.flashcards_set_page)
-        self.splitter_2.setObjectName(u"splitter_2")
-        self.splitter_2.setOrientation(Qt.Vertical)
-        self.slider_flashcards = QWidget(self.splitter_2)
-        self.slider_flashcards.setObjectName(u"slider_flashcards")
-        self.slider_flashcards.setEnabled(True)
-        sizePolicy5 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
-        sizePolicy5.setHorizontalStretch(0)
-        sizePolicy5.setVerticalStretch(0)
-        sizePolicy5.setHeightForWidth(self.slider_flashcards.sizePolicy().hasHeightForWidth())
-        self.slider_flashcards.setSizePolicy(sizePolicy5)
-        self.verticalLayout_3 = QVBoxLayout(self.slider_flashcards)
+        self.verticalLayout_3 = QVBoxLayout(self.flashcards_set_page)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.verticalLayout_3.setContentsMargins(-1, 0, 0, 0)
         self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setSpacing(5)
+#ifndef Q_OS_MAC
+        self.horizontalLayout_5.setSpacing(-1)
+#endif
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.btn_homepage = PushButton(self.slider_flashcards)
+        self.btn_homepage = PushButton(self.flashcards_set_page)
         self.btn_homepage.setObjectName(u"btn_homepage")
-        self.btn_homepage.setMinimumSize(QSize(50, 36))
+        self.btn_homepage.setMinimumSize(QSize(100, 36))
         icon4 = QIcon()
         icon4.addFile(u":/lib/ui/icons/home.png", QSize(), QIcon.Normal, QIcon.Off)
         self.btn_homepage.setIcon(icon4)
 
         self.horizontalLayout_5.addWidget(self.btn_homepage)
 
-        self.horizontalSpacer_6 = QSpacerItem(100, 20, QSizePolicy.Preferred, QSizePolicy.Minimum)
+        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_5.addItem(self.horizontalSpacer_6)
 
-        self.lbl_flashcard_count = QLabel(self.slider_flashcards)
-        self.lbl_flashcard_count.setObjectName(u"lbl_flashcard_count")
-        sizePolicy6 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
-        sizePolicy6.setHorizontalStretch(0)
-        sizePolicy6.setVerticalStretch(0)
-        sizePolicy6.setHeightForWidth(self.lbl_flashcard_count.sizePolicy().hasHeightForWidth())
-        self.lbl_flashcard_count.setSizePolicy(sizePolicy6)
-        self.lbl_flashcard_count.setAlignment(Qt.AlignCenter)
-
-        self.horizontalLayout_5.addWidget(self.lbl_flashcard_count)
-
-        self.btn_reverse = PushButton(self.slider_flashcards)
+        self.btn_reverse = PushButton(self.flashcards_set_page)
         self.btn_reverse.setObjectName(u"btn_reverse")
         self.btn_reverse.setMinimumSize(QSize(150, 36))
         icon5 = QIcon()
@@ -371,6 +368,30 @@ class Ui_MainWindow(object):
 
 
         self.verticalLayout_3.addLayout(self.horizontalLayout_5)
+
+        self.splitter_2 = QSplitter(self.flashcards_set_page)
+        self.splitter_2.setObjectName(u"splitter_2")
+        self.splitter_2.setOrientation(Qt.Vertical)
+        self.slider_flashcards = QWidget(self.splitter_2)
+        self.slider_flashcards.setObjectName(u"slider_flashcards")
+        self.slider_flashcards.setEnabled(True)
+        sizePolicy5 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
+        sizePolicy5.setHorizontalStretch(0)
+        sizePolicy5.setVerticalStretch(0)
+        sizePolicy5.setHeightForWidth(self.slider_flashcards.sizePolicy().hasHeightForWidth())
+        self.slider_flashcards.setSizePolicy(sizePolicy5)
+        self.verticalLayout_2 = QVBoxLayout(self.slider_flashcards)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.lbl_flashcard_count = QLabel(self.slider_flashcards)
+        self.lbl_flashcard_count.setObjectName(u"lbl_flashcard_count")
+        sizePolicy6 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+        sizePolicy6.setHorizontalStretch(0)
+        sizePolicy6.setVerticalStretch(0)
+        sizePolicy6.setHeightForWidth(self.lbl_flashcard_count.sizePolicy().hasHeightForWidth())
+        self.lbl_flashcard_count.setSizePolicy(sizePolicy6)
+        self.lbl_flashcard_count.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_2.addWidget(self.lbl_flashcard_count)
 
         self.flashcard = QWidget(self.slider_flashcards)
         self.flashcard.setObjectName(u"flashcard")
@@ -392,10 +413,10 @@ class Ui_MainWindow(object):
         self.btn_flashcard.setFont(font3)
         self.btn_flashcard.setCheckable(True)
 
-        self.gridLayout.addWidget(self.btn_flashcard, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.btn_flashcard, 0, 0, 1, 1)
 
 
-        self.verticalLayout_3.addWidget(self.flashcard)
+        self.verticalLayout_2.addWidget(self.flashcard)
 
         self.flashcard_options = QWidget(self.slider_flashcards)
         self.flashcard_options.setObjectName(u"flashcard_options")
@@ -440,7 +461,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addItem(self.horizontalSpacer_3)
 
 
-        self.verticalLayout_3.addWidget(self.flashcard_options)
+        self.verticalLayout_2.addWidget(self.flashcard_options)
 
         self.splitter_2.addWidget(self.slider_flashcards)
         self.layoutWidget = QWidget(self.splitter_2)
@@ -454,6 +475,33 @@ class Ui_MainWindow(object):
         self.widget_new_flashcard.setEnabled(True)
 
         self.list_flashcards_options.addWidget(self.widget_new_flashcard)
+
+        self.list_flashcards_header = QWidget(self.layoutWidget)
+        self.list_flashcards_header.setObjectName(u"list_flashcards_header")
+        self.horizontalLayout_7 = QHBoxLayout(self.list_flashcards_header)
+        self.horizontalLayout_7.setSpacing(5)
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.horizontalLayout_7.setContentsMargins(12, 5, 12, 4)
+        self.lbl_phrase_header = QLabel(self.list_flashcards_header)
+        self.lbl_phrase_header.setObjectName(u"lbl_phrase_header")
+        sizePolicy4.setHeightForWidth(self.lbl_phrase_header.sizePolicy().hasHeightForWidth())
+        self.lbl_phrase_header.setSizePolicy(sizePolicy4)
+
+        self.horizontalLayout_7.addWidget(self.lbl_phrase_header)
+
+        self.lbl_definition_header = QLabel(self.list_flashcards_header)
+        self.lbl_definition_header.setObjectName(u"lbl_definition_header")
+        sizePolicy4.setHeightForWidth(self.lbl_definition_header.sizePolicy().hasHeightForWidth())
+        self.lbl_definition_header.setSizePolicy(sizePolicy4)
+
+        self.horizontalLayout_7.addWidget(self.lbl_definition_header)
+
+        self.horizontalSpacer_5 = QSpacerItem(120, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.horizontalLayout_7.addItem(self.horizontalSpacer_5)
+
+
+        self.list_flashcards_options.addWidget(self.list_flashcards_header)
 
         self.list_flashcards = QListWidget(self.layoutWidget)
         self.list_flashcards.setObjectName(u"list_flashcards")
@@ -490,7 +538,7 @@ class Ui_MainWindow(object):
 
         self.splitter_2.addWidget(self.layoutWidget)
 
-        self.verticalLayout_2.addWidget(self.splitter_2)
+        self.verticalLayout_3.addWidget(self.splitter_2)
 
         self.stack_1.addWidget(self.flashcards_set_page)
         self.splitter.addWidget(self.stack_1)
@@ -500,7 +548,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menuBar = QMenuBar(MainWindow)
         self.menuBar.setObjectName(u"menuBar")
-        self.menuBar.setGeometry(QRect(0, 0, 886, 37))
+        self.menuBar.setGeometry(QRect(0, 0, 850, 37))
         self.menuFile = QMenu(self.menuBar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.menuBar)
@@ -529,7 +577,7 @@ class Ui_MainWindow(object):
         self.actionImport_Flashcards_Set.setText(QCoreApplication.translate("MainWindow", u"Import Flashcards Set...", None))
         self.actionExport_Flashcards_Set.setText(QCoreApplication.translate("MainWindow", u"Export Flashcards Set...", None))
         self.actionFlashcards.setText(QCoreApplication.translate("MainWindow", u"Flashcards", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Sets:", None))
+        self.lbl_sets.setText(QCoreApplication.translate("MainWindow", u"Sets:", None))
         self.btn_new_set.setText(QCoreApplication.translate("MainWindow", u"New", None))
         self.btn_import_set.setText("")
         self.btn_export_set.setText("")
@@ -538,12 +586,14 @@ class Ui_MainWindow(object):
         self.lbl_sets_count.setText(QCoreApplication.translate("MainWindow", u"Number of sets:", None))
         self.lbl_flashcards_count.setText(QCoreApplication.translate("MainWindow", u"Number of flashcards:", None))
         self.lbl_time.setText(QCoreApplication.translate("MainWindow", u"Session time (hours:minutes):", None))
-        self.btn_homepage.setText("")
+        self.btn_homepage.setText(QCoreApplication.translate("MainWindow", u" Home", None))
+        self.btn_reverse.setText(QCoreApplication.translate("MainWindow", u" reversed mode", None))
         self.lbl_flashcard_count.setText(QCoreApplication.translate("MainWindow", u"0 / 0", None))
-        self.btn_reverse.setText(QCoreApplication.translate("MainWindow", u"reversed mode", None))
         self.btn_flashcard.setText("")
         self.btn_previous_flashcard.setText("")
         self.btn_next_flashcard.setText("")
+        self.lbl_phrase_header.setText(QCoreApplication.translate("MainWindow", u"phrase", None))
+        self.lbl_definition_header.setText(QCoreApplication.translate("MainWindow", u"definition", None))
         self.btn_generate_test.setText(QCoreApplication.translate("MainWindow", u"Generate test", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))

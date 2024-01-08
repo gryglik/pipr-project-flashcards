@@ -15,8 +15,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLineEdit, QRadioButton,
-    QSizePolicy, QWidget)
+from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLineEdit, QSizePolicy,
+    QWidget)
 
 from lib.ui.widgets_basic import PushButton
 import resources_rc
@@ -58,43 +58,43 @@ class Ui_NewFlashcardsWidget(object):
 
         self.horizontalLayout.addWidget(self.fld_definition)
 
-        self.rbtn_priority = QRadioButton(NewFlashcardsWidget)
-        self.rbtn_priority.setObjectName(u"rbtn_priority")
-        self.rbtn_priority.setEnabled(True)
-        sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        self.btn_priority = PushButton(NewFlashcardsWidget)
+        self.btn_priority.setObjectName(u"btn_priority")
+        self.btn_priority.setEnabled(True)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.rbtn_priority.sizePolicy().hasHeightForWidth())
-        self.rbtn_priority.setSizePolicy(sizePolicy2)
-        self.rbtn_priority.setCheckable(True)
-        self.rbtn_priority.setChecked(False)
+        sizePolicy2.setHeightForWidth(self.btn_priority.sizePolicy().hasHeightForWidth())
+        self.btn_priority.setSizePolicy(sizePolicy2)
+        icon = QIcon()
+        icon.addFile(u":/lib/ui/icons/empty_star.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u":/lib/ui/icons/full_star.png", QSize(), QIcon.Normal, QIcon.On)
+        self.btn_priority.setIcon(icon)
+        self.btn_priority.setCheckable(True)
 
-        self.horizontalLayout.addWidget(self.rbtn_priority)
+        self.horizontalLayout.addWidget(self.btn_priority)
 
         self.btn_add_flashcard = PushButton(NewFlashcardsWidget)
         self.btn_add_flashcard.setObjectName(u"btn_add_flashcard")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.btn_add_flashcard.sizePolicy().hasHeightForWidth())
-        self.btn_add_flashcard.setSizePolicy(sizePolicy3)
+        sizePolicy2.setHeightForWidth(self.btn_add_flashcard.sizePolicy().hasHeightForWidth())
+        self.btn_add_flashcard.setSizePolicy(sizePolicy2)
         font1 = QFont()
         font1.setPointSize(13)
         self.btn_add_flashcard.setFont(font1)
-        icon = QIcon()
-        icon.addFile(u":/lib/ui/icons/plus.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.btn_add_flashcard.setIcon(icon)
+        icon1 = QIcon()
+        icon1.addFile(u":/lib/ui/icons/plus.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.btn_add_flashcard.setIcon(icon1)
 
         self.horizontalLayout.addWidget(self.btn_add_flashcard)
 
         self.btn_cancel_flashcard = PushButton(NewFlashcardsWidget)
         self.btn_cancel_flashcard.setObjectName(u"btn_cancel_flashcard")
-        sizePolicy3.setHeightForWidth(self.btn_cancel_flashcard.sizePolicy().hasHeightForWidth())
-        self.btn_cancel_flashcard.setSizePolicy(sizePolicy3)
+        sizePolicy2.setHeightForWidth(self.btn_cancel_flashcard.sizePolicy().hasHeightForWidth())
+        self.btn_cancel_flashcard.setSizePolicy(sizePolicy2)
         self.btn_cancel_flashcard.setFont(font1)
-        icon1 = QIcon()
-        icon1.addFile(u":/lib/ui/icons/delete.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.btn_cancel_flashcard.setIcon(icon1)
+        icon2 = QIcon()
+        icon2.addFile(u":/lib/ui/icons/delete.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.btn_cancel_flashcard.setIcon(icon2)
         self.btn_cancel_flashcard.setCheckable(False)
 
         self.horizontalLayout.addWidget(self.btn_cancel_flashcard)
@@ -109,7 +109,7 @@ class Ui_NewFlashcardsWidget(object):
         NewFlashcardsWidget.setWindowTitle(QCoreApplication.translate("NewFlashcardsWidget", u"Form", None))
         self.fld_phrase.setPlaceholderText(QCoreApplication.translate("NewFlashcardsWidget", u"phrase", None))
         self.fld_definition.setPlaceholderText(QCoreApplication.translate("NewFlashcardsWidget", u"definition", None))
-        self.rbtn_priority.setText("")
+        self.btn_priority.setText("")
         self.btn_add_flashcard.setText("")
         self.btn_cancel_flashcard.setText("")
     # retranslateUi
