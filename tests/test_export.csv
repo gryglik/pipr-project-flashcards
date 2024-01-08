@@ -1,7 +1,7 @@
-phrase,definition,priority
-cat,kot,False
-dog,pies,True
-cow, krowa,False
-horse, kon,False
-fish, ryba,True
-bee, pszczola,False
+phrase,definition,priority,learning_cup
+cat,kot,False,0
+dog,pies,True,0
+cow, krowa,False,0
+horse, kon,False,0
+fish, ryba,True,0
+bee, pszczola,False,0

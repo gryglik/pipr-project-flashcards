@@ -121,7 +121,7 @@ class Flashcard():
             error.InvalidLearningCupError: if new learning cup is out
             of range
         """
-        if new_learning_cup not in [0, 1, 2, 3]:
+        if int(new_learning_cup) not in [0, 1, 2, 3]:
             raise error.InvalidLearningCupError(
                 'Cannot set learning cup. Learning cup has to be an integer '
                 and 'from range 0 - 3')
