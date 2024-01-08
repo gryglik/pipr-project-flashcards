@@ -116,6 +116,18 @@ QWidget#list_flashcards_header{
 QWidget#container_lbl_sets{
 	background-color: white;
 }
+
+QWidget#learning_widget{
+	border: 3px;
+	border-style: solid;
+	border-color: white;
+}
+
+QWidget#widget_mode_intelligent_test {
+	border: 3px;
+	border-style: solid;
+	border-color: white;
+}
 </string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -845,6 +857,19 @@ QWidget#container_lbl_sets{
              </item>
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_2">
+               <item>
+                <widget class="PushButton" name="btn_learn">
+                 <property name="minimumSize">
+                  <size>
+                   <width>150</width>
+                   <height>36</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Intelligent Learning</string>
+                 </property>
+                </widget>
+               </item>
                <item>
                 <spacer name="horizontalSpacer_4">
                  <property name="orientation">

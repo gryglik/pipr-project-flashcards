@@ -1,6 +1,14 @@
+class InvalidLearningCupError(Exception):
+    """Raised when trying to set invalid learning cup of the flashcard."""
+
+
 class EmptyStringError(Exception):
     """Raised when trying to set string empty."""
     pass
+
+
+class EmptySetError(Exception):
+    """Raised when trying access flashcards on empty set."""
 
 
 class FlashcardNotInSetError(Exception):

@@ -22,7 +22,8 @@ class Import():
                 flashcard = Flashcard(
                     record['phrase'],
                     record['definition'],
-                    priority=True if record['priority'] == 'True' else False
+                    priority=True if record['priority'] == 'True' else False,
+                    learning_cup=record['learning_cup']
                 )
             except Exception:
                 raise InvalidFlashcardError(flashcard)
@@ -45,13 +46,15 @@ class Export():
     def _writeFlashcardsSetToCsv(
             self, flashcards_set: FlashcardsSet, fp: TextIO) -> None:
         """Writes flashcards set to the given csv file object"""
-        writer = csv.DictWriter(fp, ['phrase', 'definition', 'priority'])
+        writer = csv.DictWriter(fp, [
+            'phrase', 'definition', 'priority', 'learning_cup'])
         writer.writeheader()
         for flashcard in flashcards_set.flashcards:
             writer.writerow({
                 'phrase': flashcard.phrase,
                 'definition': flashcard.definition,
-                'priority': flashcard.priority
+                'priority': flashcard.priority,
+                'learning_cup': flashcard.learning_cup
             })
 
     def write_flashcards_set_to_csv(

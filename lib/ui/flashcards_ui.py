@@ -125,6 +125,18 @@ class Ui_MainWindow(object):
 "QWidget#container_lbl_sets{\n"
 "	background-color: white;\n"
 "}\n"
+"\n"
+"QWidget#learning_widget{\n"
+"	border: 3px;\n"
+"	border-style: solid;\n"
+"	border-color: white;\n"
+"}\n"
+"\n"
+"QWidget#widget_mode_intelligent_test {\n"
+"	border: 3px;\n"
+"	border-style: solid;\n"
+"	border-color: white;\n"
+"}\n"
 "")
         self.actionImport_Flashcards_Set = QAction(MainWindow)
         self.actionImport_Flashcards_Set.setObjectName(u"actionImport_Flashcards_Set")
@@ -518,6 +530,12 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.btn_learn = PushButton(self.layoutWidget)
+        self.btn_learn.setObjectName(u"btn_learn")
+        self.btn_learn.setMinimumSize(QSize(150, 36))
+
+        self.horizontalLayout_2.addWidget(self.btn_learn)
+
         self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer_4)
@@ -594,6 +612,7 @@ class Ui_MainWindow(object):
         self.btn_next_flashcard.setText("")
         self.lbl_phrase_header.setText(QCoreApplication.translate("MainWindow", u"phrase", None))
         self.lbl_definition_header.setText(QCoreApplication.translate("MainWindow", u"definition", None))
+        self.btn_learn.setText(QCoreApplication.translate("MainWindow", u"Intelligent Learning", None))
         self.btn_generate_test.setText(QCoreApplication.translate("MainWindow", u"Generate test", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))

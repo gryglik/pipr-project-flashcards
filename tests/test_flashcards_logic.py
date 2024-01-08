@@ -4,25 +4,34 @@ from time import sleep
 from flashcards_logic import (
     Flashcard, FlashcardsSet, TestItem, Session, Test, TestResult)
 from lib.errors import (
-    EmptyStringError, FlashcardNotInSetError, IndexOutOfRangeError,
-    StringTooLongError, SetNotInSessionError, NotOpenedSetError,
-    NotOpenedFlashcardError, ClosedTestItemError, TestNotStartedError,
-    TestNotFinishedError, InvalidTestItemMode
+    InvalidLearningCupError, EmptyStringError, FlashcardNotInSetError,
+    IndexOutOfRangeError, StringTooLongError, SetNotInSessionError,
+    NotOpenedSetError, NotOpenedFlashcardError, ClosedTestItemError,
+    TestNotStartedError, TestNotFinishedError, InvalidTestItemMode,
+    EmptySetError
     )
 
 
 def test_Flashcard_create_typical():
-    flashcard = Flashcard('cat', 'kot', True)
+    flashcard = Flashcard('cat', 'kot')
     assert flashcard.phrase == 'cat'
     assert flashcard.definition == 'kot'
-    assert flashcard.priority
+    assert not flashcard.priority
+    assert flashcard.learning_cup == 0
 
 
-def test_Flashcard_create_no_priority():
-    flascard = Flashcard('cat', 'kot')
+def test_Flashcard_create_priority():
+    flascard = Flashcard('cat', 'kot', True)
     assert flascard.phrase == 'cat'
     assert flascard.definition == 'kot'
-    assert not flascard.priority
+    assert flascard.priority
+
+
+def test_Flashcard_create_learning_cup():
+    flascard = Flashcard('cat', 'kot', learning_cup=2)
+    assert flascard.phrase == 'cat'
+    assert flascard.definition == 'kot'
+    assert flascard.learning_cup == 2
 
 
 def test_Flashcard_create_empty_phrase_or_definition():
@@ -73,6 +82,63 @@ def test_Flashcard_definition_set_empty():
         flashcard.phrase = ''
 
 
+def test_Flashcard_invalid_learning_cup():
+    flashcard = Flashcard('cat', 'kot')
+    assert flashcard.learning_cup == 0
+    with pytest.raises(InvalidLearningCupError):
+        flashcard.learning_cup = -1
+    with pytest.raises(InvalidLearningCupError):
+        flashcard.learning_cup = 4
+
+
+def test_Flashcard_next_learning_cup_typical():
+    flashcard = Flashcard('cat', 'kot')
+    assert flashcard.learning_cup == 0
+    flashcard.next_learning_cup()
+    assert flashcard.learning_cup == 1
+    flashcard.next_learning_cup()
+    assert flashcard.learning_cup == 2
+    flashcard.next_learning_cup()
+    assert flashcard.learning_cup == 3
+
+
+def test_Flashcard_next_learnig_cup_learned():
+    flashcard = Flashcard('cat', 'kot', learning_cup=3)
+    assert flashcard.learning_cup == 3
+    flashcard.next_learning_cup()
+    assert flashcard.learning_cup == 3
+
+
+def test_Flashcard_previous_learning_cup_typical():
+    flashcard = Flashcard('cat', 'kot', learning_cup=3)
+    assert flashcard.learning_cup == 3
+    flashcard.previous_learning_cup()
+    assert flashcard.learning_cup == 2
+    flashcard.previous_learning_cup()
+    assert flashcard.learning_cup == 1
+    flashcard.previous_learning_cup()
+    assert flashcard.learning_cup == 0
+
+
+def test_Flashcard_previous_learning_cup_0_cup():
+    flashcard = Flashcard('cat', 'kot')
+    assert flashcard.learning_cup == 0
+    flashcard.previous_learning_cup()
+    assert flashcard.learning_cup == 0
+
+
+def test_Flashcard_is_learned():
+    flashcard = Flashcard('cat', 'kot')
+    assert flashcard.learning_cup == 0
+    assert not flashcard.is_learned()
+    flashcard.next_learning_cup()
+    assert not flashcard.is_learned()
+    flashcard.learning_cup = 3
+    assert flashcard.is_learned()
+    flashcard.previous_learning_cup()
+    assert not flashcard.is_learned()
+
+
 def test_FlashcardsSet_create_typical():
     flashcards = [Flashcard('cat', 'kot'),
                   Flashcard('dog', 'pies')]
@@ -95,6 +161,13 @@ def test_FlashcardsSet_too_long_name():
     with pytest.raises(StringTooLongError):
         flashcards_set = FlashcardsSet('set1')
         flashcards_set.name = string
+
+
+def test_FlashcardsSet_set_learned_today():
+    flashcards_set = FlashcardsSet('empty_set')
+    assert not flashcards_set.is_learned_today()
+    flashcards_set.set_learned_today()
+    assert flashcards_set.is_learned_today()
 
 
 def test_FlashcardsSet_create_no_flashcards():
@@ -200,6 +273,168 @@ def test_FlashcardsSet_draw_flashcards_invalid_count():
         flashcards_set.draw_flashcards(-1)
 
 
+def test_FlashcardsSet_get_flashcards_cup_typical():
+    flashcard1 = Flashcard('cat', 'kot', learning_cup=0)
+    flashcard2 = Flashcard('dog', 'pies', learning_cup=2)
+    flashcard3 = Flashcard('cow', 'krowa', learning_cup=2)
+    flashcard4 = Flashcard('fish', 'ryba', learning_cup=3)
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1, flashcard2, flashcard3, flashcard4])
+    assert flashcards_set.get_flashcards_cup(0) == [flashcard1]
+    assert not flashcards_set.get_flashcards_cup(1)
+    assert flashcards_set.get_flashcards_cup(2) == [
+        flashcard2, flashcard3]
+    assert flashcards_set.get_flashcards_cup(3) == [flashcard4]
+
+
+def test_FlashcardsSet_create_learning_set_typical():
+    flashcards_set = FlashcardsSet(
+        'set1', [
+            Flashcard('cat', 'kot', learning_cup=0),
+            Flashcard('dog', 'pies', learning_cup=2),
+            Flashcard('cow', 'krowa', learning_cup=1),
+            Flashcard('fish', 'ryba', learning_cup=3),
+            Flashcard('cat', 'kot', learning_cup=3),
+            Flashcard('dog', 'pies', learning_cup=2),
+            Flashcard('cow', 'krowa', learning_cup=2),
+            Flashcard('fish', 'ryba', learning_cup=2),
+            Flashcard('cat', 'kot', learning_cup=1),
+            Flashcard('dog', 'pies', learning_cup=2),
+            Flashcard('cow', 'krowa', learning_cup=1),
+            Flashcard('fish', 'ryba', learning_cup=1),
+            Flashcard('cat', 'kot', learning_cup=0),
+            Flashcard('dog', 'pies', learning_cup=0),
+            Flashcard('cow', 'krowa', learning_cup=0),
+            Flashcard('fish', 'ryba', learning_cup=1)])
+    learning_set = flashcards_set.create_learning_set()
+    assert learning_set.len() == 11
+    assert len(learning_set.get_flashcards_cup(0)) == 3
+    assert len(learning_set.get_flashcards_cup(1)) == 3
+    assert len(learning_set.get_flashcards_cup(2)) == 5
+
+
+def test_FlashcardsSet_create_learning_set_less_than_15_flashcards():
+    flashcards_set = FlashcardsSet(
+        'set1', [
+            Flashcard('cat', 'kot', learning_cup=0),
+            Flashcard('dog', 'pies', learning_cup=2)])
+    learning_set = flashcards_set.create_learning_set()
+    assert learning_set.len() == 2
+    assert len(learning_set.get_flashcards_cup(0)) == 1
+    assert len(learning_set.get_flashcards_cup(1)) == 0
+    assert len(learning_set.get_flashcards_cup(2)) == 1
+
+
+def test_FlashcardsSet_create_learning_set_empty_set():
+    flashcards_set = FlashcardsSet('setq')
+    with pytest.raises(EmptySetError):
+        flashcards_set.create_learning_set()
+
+
+def test_FlashcardsSet_create_learning_set_last_not_learned():
+    flashcard1 = Flashcard('cat', 'kot', learning_cup=2)
+    flashcard2 = Flashcard('dog', 'pies', learning_cup=3)
+    flashcard3 = Flashcard('cow', 'krowa', learning_cup=3)
+    flashcard4 = Flashcard('fish', 'ryba', learning_cup=3)
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1, flashcard2, flashcard3, flashcard4])
+    assert flashcards_set.create_learning_set().len() == 1
+    flashcard1.next_learning_cup()
+    assert flashcards_set.is_learned()
+    with pytest.raises(EmptySetError):
+        flashcards_set.create_learning_set()
+
+
+def test_FlashcardsSet_create_learning_set_all_lerned():
+    flashcard1 = Flashcard('cat', 'kot', learning_cup=3)
+    flashcard2 = Flashcard('dog', 'pies', learning_cup=3)
+    flashcard3 = Flashcard('cow', 'krowa', learning_cup=3)
+    flashcard4 = Flashcard('fish', 'ryba', learning_cup=3)
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1, flashcard2, flashcard3, flashcard4])
+    with pytest.raises(EmptySetError):
+        flashcards_set.create_learning_set()
+    assert flashcards_set.get_learning_status() == flashcards_set.len()
+
+
+def test_FlashcardsSet_create_learning_set_almost_lerned():
+    flashcards_set = FlashcardsSet(
+        'set1', [
+            Flashcard('cat', 'kot', learning_cup=3),
+            Flashcard('dog', 'pies', learning_cup=3),
+            Flashcard('cow', 'krowa', learning_cup=1),
+            Flashcard('fish', 'ryba', learning_cup=3),
+            Flashcard('cat', 'kot', learning_cup=3),
+            Flashcard('dog', 'pies', learning_cup=3),
+            Flashcard('cow', 'krowa', learning_cup=3),
+            Flashcard('fish', 'ryba', learning_cup=2),
+            Flashcard('cat', 'kot', learning_cup=1),
+            Flashcard('dog', 'pies', learning_cup=3),
+            Flashcard('cow', 'krowa', learning_cup=3),
+            Flashcard('fish', 'ryba', learning_cup=2),
+            Flashcard('cat', 'kot', learning_cup=2),
+            Flashcard('dog', 'pies', learning_cup=0),
+            Flashcard('cow', 'krowa', learning_cup=3),
+            Flashcard('fish', 'ryba', learning_cup=3)])
+    learning_set = flashcards_set.create_learning_set()
+    assert learning_set.len() == 6
+    assert len(learning_set.get_flashcards_cup(0)) == 1
+    assert len(learning_set.get_flashcards_cup(1)) == 2
+    assert len(learning_set.get_flashcards_cup(2)) == 3
+
+
+def test_FlashcardsSet_create_learning_set_only_second_cup():
+    flashcards_set = FlashcardsSet(
+        'set1', [
+            Flashcard('cat', 'kot', learning_cup=3),
+            Flashcard('dog', 'pies', learning_cup=3),
+            Flashcard('cow', 'krowa', learning_cup=2),
+            Flashcard('fish', 'ryba', learning_cup=3),
+            Flashcard('cat', 'kot', learning_cup=3),
+            Flashcard('dog', 'pies', learning_cup=3),
+            Flashcard('cow', 'krowa', learning_cup=3),
+            Flashcard('fish', 'ryba', learning_cup=2),
+            Flashcard('cat', 'kot', learning_cup=2),
+            Flashcard('dog', 'pies', learning_cup=3),
+            Flashcard('cow', 'krowa', learning_cup=3),
+            Flashcard('fish', 'ryba', learning_cup=2),
+            Flashcard('cat', 'kot', learning_cup=2),
+            Flashcard('dog', 'pies', learning_cup=2),
+            Flashcard('cow', 'krowa', learning_cup=3),
+            Flashcard('fish', 'ryba', learning_cup=3)])
+    learning_set = flashcards_set.create_learning_set()
+    assert learning_set.len() == 6
+    assert len(learning_set.get_flashcards_cup(0)) == 0
+    assert len(learning_set.get_flashcards_cup(1)) == 0
+    assert len(learning_set.get_flashcards_cup(2)) == 6
+
+
+def test_FlashcardsSet_get_learning_status():
+    flashcard1 = Flashcard('cat', 'kot', learning_cup=0)
+    flashcard2 = Flashcard('dog', 'pies', learning_cup=2)
+    flashcard3 = Flashcard('cow', 'krowa', learning_cup=2)
+    flashcard4 = Flashcard('fish', 'ryba', learning_cup=3)
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1, flashcard2, flashcard3, flashcard4])
+    assert flashcards_set.get_learning_status() == 1
+
+
+def test_FlashcardsSet_get_learning_progress():
+    flashcard1 = Flashcard('cat', 'kot', learning_cup=0)
+    flashcard2 = Flashcard('dog', 'pies', learning_cup=2)
+    flashcard3 = Flashcard('cow', 'krowa', learning_cup=2)
+    flashcard4 = Flashcard('fish', 'ryba', learning_cup=3)
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard1, flashcard2, flashcard3, flashcard4])
+    assert flashcards_set.get_learning_progress() == (7, 12)
+
+
+def test_TestItem_create_typical():
+    flashcard = Flashcard('cat', 'kot')
+    test_item = TestItem(flashcard)
+    assert flashcard == test_item.get_flashcard()
+
+
 def test_TestItem_invalid_mode():
     flashcard = Flashcard('cat', 'kot')
     with pytest.raises(InvalidTestItemMode):
@@ -278,7 +513,7 @@ def test_Test_start_test_typical():
 
 def test_Test_empty_flashcards_set():
     flashcards_set = FlashcardsSet('set')
-    with pytest.raises(FlashcardNotInSetError):
+    with pytest.raises(EmptySetError):
         Test(flashcards_set)
 
 
@@ -796,6 +1031,31 @@ def test_Session_generate_test_not_opened_set():
     session.add_set(flashcards_set)
     with pytest.raises(NotOpenedSetError):
         session.generate_test(2)
+
+
+def test_Session_learning_test_create():
+    flashcard_1 = Flashcard('cat', 'kot')
+    flashcard_2 = Flashcard('dog', 'pies')
+    flashcard_3 = Flashcard('cow', 'krowa')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard_1, flashcard_2, flashcard_3])
+    session = Session('user')
+    session.add_set(flashcards_set)
+    session.open_set(flashcards_set)
+    learning_test = session.learning_test()
+    assert not learning_test.is_started()
+
+
+def test_Session_learning_test_create_not_opened_set():
+    flashcard_1 = Flashcard('cat', 'kot')
+    flashcard_2 = Flashcard('dog', 'pies')
+    flashcard_3 = Flashcard('cow', 'krowa')
+    flashcards_set = FlashcardsSet(
+        'set1', [flashcard_1, flashcard_2, flashcard_3])
+    session = Session('user')
+    session.add_set(flashcards_set)
+    with pytest.raises(NotOpenedSetError):
+        session.learning_test()
 
 
 def test_Session_generate_test_invalid_question_count():

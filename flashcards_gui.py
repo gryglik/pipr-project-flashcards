@@ -10,7 +10,7 @@ from lib.ui.widgets import (
     ListSetsWidget, ListFlashcardsWidget)
 from lib.ui.dialogs import (
     InputSetNameDialog, InputUsernameDialog, GenerateTestDialog,
-    ConductTestDialog)
+    ConductTestDialog, StartIntelligentTestDialog)
 
 from flashcards_logic import (
     Session, SessionStats, FlashcardsSet, Flashcard, Test)
@@ -79,7 +79,10 @@ class FlashcardWindow(QMainWindow):
             self._createNewFlashcard)
         ui.widget_new_flashcard.ui.btn_cancel_flashcard.clicked.connect(
             self._eraseNewFlashcard)
+        # - Generating test
         ui.btn_generate_test.clicked.connect(self._generateTest)
+        # - Starting intelligent learning
+        ui.btn_learn.clicked.connect(self._startIntelligentLearning)
         return ui
 
     def _initialiseHomePage(self) -> None:
@@ -382,32 +385,80 @@ class FlashcardWindow(QMainWindow):
     def _generateTest(self) -> None:
         """Generates test and conducts it."""
         # Gathering data to create test
-        question_count, mode = self._getTestSetup()
-        # Trying to generate test
         try:
-            test = self.session.generate_test(question_count, test_mode=mode)
-            self._conductTest(test)
+            test_setup = self._getTestSetup()
         except Exception as e:
-            ErrorDialog(str(e))
+            ErrorDialog(e)
+        if test_setup:
+            question_count, mode = test_setup
+            # Trying to generate test
+            try:
+                test = self.session.generate_test(
+                    question_count, test_mode=mode)
+                self._conductTest(test)
+            except Exception as e:
+                ErrorDialog(str(e))
 
-    def _getTestSetup(self) -> tuple[int, int]:
+    def _getTestSetup(self) -> tuple[int, int] | None:
         """Opens dialog and returns test setup parameters."""
-        # Creating dialog to get questions count
+        # Creating dialog to get questions count and mode
         dlg_test_setup = GenerateTestDialog(parent=self)
-        dlg_test_setup.exec()
+        # If window was closed return none
+        if not dlg_test_setup.exec():
+            return None
         # Accessing question count
         question_count = dlg_test_setup.ui.spnbx_questions_number.value()
         # Accessing mode
         mode = dlg_test_setup.ui.combx_quesion_mode.currentIndex()
         return question_count, mode
 
-    def _conductTest(self, test: Test) -> None:
+    def _conductTest(self, test: Test) -> bool:
         """Opens dialog and conducts test."""
         try:
             dlg_test = ConductTestDialog(test, parent=self)
+            dlg_test.exec()
         except Exception as e:
             ErrorDialog(str(e))
-        dlg_test.exec()
+        return dlg_test.result()
+
+    def _startIntelligentLearning(self) -> None:
+        """Conducts test with learning set provided by the opened
+        flashcards set.
+        """
+        # Getting setup of the Intelligent Learning
+        mode, result = self._getIntelligentLearningSetup()
+
+        conducted = False
+        if result:
+            try:
+                # Creating learning test
+                learning_test = self.session.learning_test(test_mode=mode)
+                conducted = self._conductTest(learning_test)
+            except Exception as e:
+                ErrorDialog(str(e))
+
+        # Saving test result
+        if conducted:
+            try:
+                self.session.analyse_learning_result(learning_test)
+                self.session.opened_set.set_learned_today()
+            except Exception as e:
+                ErrorDialog(str(e))
+
+    def _getIntelligentLearningSetup(self) -> tuple[int, int]:
+        """Get setup of the intelligent learning session
+        """
+        try:
+            dlg_start_learning = StartIntelligentTestDialog(
+                self.session.opened_set, parent=self)
+            dlg_start_learning.exec()
+        except Exception as e:
+            ErrorDialog(str(e))
+        # Accessing mode
+        mode = dlg_start_learning.ui.combx_quesion_mode.currentIndex()
+        # Accessing result
+        result = dlg_start_learning.result()
+        return mode, result
 
 
 def guiMain(args):

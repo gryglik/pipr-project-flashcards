@@ -1,14 +1,15 @@
-from PySide6.QtWidgets import QWidget, QDialog, QListWidgetItem
+from PySide6.QtWidgets import QWidget, QDialog, QListWidgetItem, QMessageBox
 from PySide6.QtCore import Qt
 
 from lib.ui.widgets_ui.InputTextDialog_ui import Ui_InputTextDialog
 from lib.ui.widgets_ui.InputUsernameDialog_ui import Ui_InputUsernameDialog
 from lib.ui.widgets_ui.CreateTestDialog_ui import Ui_CreateTestDialog
 from lib.ui.widgets_ui.ConductTestDialog_ui import Ui_ConductTestDialog
+from lib.ui.widgets_ui.StartIntelligentTestDialog_ui import Ui_StartIntelligentTestDialog  # noqa: E501
 from lib.ui.widgets import ListTestWidget, TestSummaryWidget
 from lib.ui.widgets_basic import Dialog
 
-from flashcards_logic import Test, TestItem
+from flashcards_logic import Test, TestItem, FlashcardsSet
 
 
 class InputTextDialog(Dialog):
@@ -132,6 +133,49 @@ class ConductTestDialog(Dialog):
         summary_widget: TestSummaryWidget = TestSummaryWidget(self.test)
         self.ui.list_test.setItemWidget(list_summary_item, summary_widget)
         list_summary_item.setSizeHint(summary_widget.sizeHint())
+
+
+class StartIntelligentTestDialog(Dialog):
+    def __init__(
+            self, flashcards_set: FlashcardsSet,
+            parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        # Asigning flashcards set to dialog
+        self._flashcards_set = flashcards_set
+        # Setuping ui
+        self.setWindowTitle(
+            f'Flashcards - Intelligent Test - {flashcards_set.name}')
+        self.ui = Ui_StartIntelligentTestDialog()
+        self.ui.setupUi(self)
+        # - Setuping info lbl
+        if flashcards_set.is_empty():
+            self.ui.lbl_info.setText(
+                'Flashcards set is empty. Add flashcards to the set')
+        elif flashcards_set.is_learned():
+            self.ui.lbl_info.setText(
+                'Congratulations, you learned all the flashcards. '
+                + 'If you want to start learning again click reset button')
+            # Disabling button
+            self.ui.btn_start.setEnabled(False)
+        elif flashcards_set.is_learned_today():
+            self.ui.lbl_info.setText(
+                'Well done, you have already done test today. '
+                + 'You can do next one if you want')
+        # - Setuping progress bar
+        points, max = flashcards_set.get_learning_progress()
+        self.ui.progressBar.setMaximum(max)
+        self.ui.progressBar.setValue(points)
+        # - binding actions to buttons
+        self.ui.btn_start.clicked.connect(self.accept)
+        self.ui.btn_reset.clicked.connect(self._reset)
+
+    def _reset(self) -> None:
+        reset = QMessageBox.question(
+            self, 'Reset', 'Do you want to reset Intelligent Learning?',
+            QMessageBox.Yes | QMessageBox.No)
+        if reset == QMessageBox.Yes:
+            self._flashcards_set.reset_learning_progress()
+        self.reject()
 
 
 class InputUsernameDialog(QDialog):
