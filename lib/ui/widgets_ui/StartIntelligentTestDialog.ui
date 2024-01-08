@@ -22,9 +22,6 @@
     <height>300</height>
    </size>
   </property>
-  <property name="windowTitle">
-   <string>Dialog</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QWidget" name="learning_widget" native="true">
@@ -84,7 +81,7 @@
    <item>
     <widget class="QProgressBar" name="progressBar"/>
    </item>
-   <item>
+   <item alignment="Qt::AlignHCenter">
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>progress</string>

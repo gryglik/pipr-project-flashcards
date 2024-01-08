@@ -71,7 +71,7 @@ class Ui_StartIntelligentTestDialog(object):
         self.label_3 = QLabel(StartIntelligentTestDialog)
         self.label_3.setObjectName(u"label_3")
 
-        self.verticalLayout_2.addWidget(self.label_3)
+        self.verticalLayout_2.addWidget(self.label_3, 0, Qt.AlignHCenter)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
@@ -139,7 +139,6 @@ class Ui_StartIntelligentTestDialog(object):
     # setupUi
 
     def retranslateUi(self, StartIntelligentTestDialog):
-        StartIntelligentTestDialog.setWindowTitle(QCoreApplication.translate("StartIntelligentTestDialog", u"Dialog", None))
         self.label.setText(QCoreApplication.translate("StartIntelligentTestDialog", u"Welcome to the Intelligent Learning Mode. Keep coming back here to train and see your progress in learning. ", None))
         self.label_2.setText(QCoreApplication.translate("StartIntelligentTestDialog", u"In Intelligent Learning Mode you will be provided with test containing specially selected questions to make your learning process impressively effective. ", None))
         self.lbl_info.setText(QCoreApplication.translate("StartIntelligentTestDialog", u"You havn't done test today, do it.", None))
@@ -151,5 +150,6 @@ class Ui_StartIntelligentTestDialog(object):
 
         self.btn_reset.setText(QCoreApplication.translate("StartIntelligentTestDialog", u"Reset", None))
         self.btn_start.setText(QCoreApplication.translate("StartIntelligentTestDialog", u"Start", None))
+        pass
     # retranslateUi
 

@@ -144,7 +144,7 @@ class StartIntelligentTestDialog(Dialog):
         self._flashcards_set = flashcards_set
         # Setuping ui
         self.setWindowTitle(
-            f'Flashcards - Intelligent Test - {flashcards_set.name}')
+            f'Flashcards - Intelligent Learning - {flashcards_set.name}')
         self.ui = Ui_StartIntelligentTestDialog()
         self.ui.setupUi(self)
         # - Setuping info lbl
