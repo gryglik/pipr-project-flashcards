@@ -226,6 +226,8 @@ class FlashcardWindow(QMainWindow):
 
     def _setupFlashcardsSetPage(self, flashcards_set: FlashcardsSet) -> None:
         """Setups GUI to show given flashcards set."""
+        # Closing opened flashcards set
+        self.session.close_set()
         # 1. Clearing list of flashcards
         self.ui.list_flashcards.clear()
         # 2. Updating current opened set reference in session
