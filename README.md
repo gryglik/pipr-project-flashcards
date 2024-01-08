@@ -128,6 +128,7 @@ Projekt obejmuje **100 testów jednostkowych** sprawdzających kluczowe funkcjon
 - Python: 3.12.0 wraz z pakietami z pliku [requirements.txt](requirements.txt)
 ### Uruchomienie:
 - Aby uruchomić program należy uruchomić plik [flashcards_gui.py](flashcards_gui.py)
+- **UWAGA: OKNO STARTOWE MOŻE ZNAJDOWAĆ SIĘ POD INNYMI OKNAMI**
 
 ## Interfejs:
 ### 1. [Ekran logowanie](documentation_attachments/Flashcard_login.png)
