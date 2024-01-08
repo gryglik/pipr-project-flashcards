@@ -48,6 +48,7 @@ Moduł korzysta z następujących bibliotek
         * [główny moduł konfiguracyjny głównego okna aplikacji](lib/ui/flashcards_ui.py) - wykonany z wykorzystaniem oprogramowania z biblioteki **PySide6**. Wykorzystuje funkcjonalność **kaskadowych arkuszy stylów (CSS)**, dzięki temu interfejs graficzny jest spójny graficznie.
         * [moduły konfiguracyjne widżetów oraz okien dialogowych ](lib/ui/widgets_ui/) - wykonanych z wykorzystaniem oprogramowania z biblioteki **PySide6**
     * **[biblioteka logiki gry](flashcards_logic.py)** - do obsługi zachowań użytkownika
+    * **[resources_rc](resources_rc.py)** - biblioteka zasobów interfejsu graficznego
 
 #### 1.3. Opis klas
 Plik zawiera jedną klasę FlaschcardWindow odpowiedzialną za obsługę głównego okna aplikacji.
@@ -235,4 +236,4 @@ Projekt okazał się bardzo ciekawy i rozwijający. Konieczność samodzielnego 
 * wyświetlanie tylko wyróżnionych fiszek
 * sortowanie, losowanie fiszek
 * inne rodzaje zadań testowych
-* wypiszanie poprawnych odpowiedzi w wynikach testu
+* wypisanie poprawnych odpowiedzi w wynikach testu
